@@ -1,0 +1,15 @@
+D:\Lectures\Engines\L1\ConsoleApp1\bin\Debug\net6.0\SimpleCalc.exe
+D:\Lectures\Engines\L1\ConsoleApp1\bin\Debug\net6.0\SimpleCalc.deps.json
+D:\Lectures\Engines\L1\ConsoleApp1\bin\Debug\net6.0\SimpleCalc.runtimeconfig.json
+D:\Lectures\Engines\L1\ConsoleApp1\bin\Debug\net6.0\SimpleCalc.dll
+D:\Lectures\Engines\L1\ConsoleApp1\bin\Debug\net6.0\ref\SimpleCalc.dll
+D:\Lectures\Engines\L1\ConsoleApp1\bin\Debug\net6.0\SimpleCalc.pdb
+D:\Lectures\Engines\L1\ConsoleApp1\obj\Debug\net6.0\SimpleCalc.csproj.AssemblyReference.cache
+D:\Lectures\Engines\L1\ConsoleApp1\obj\Debug\net6.0\SimpleCalc.GeneratedMSBuildEditorConfig.editorconfig
+D:\Lectures\Engines\L1\ConsoleApp1\obj\Debug\net6.0\SimpleCalc.AssemblyInfoInputs.cache
+D:\Lectures\Engines\L1\ConsoleApp1\obj\Debug\net6.0\SimpleCalc.AssemblyInfo.cs
+D:\Lectures\Engines\L1\ConsoleApp1\obj\Debug\net6.0\SimpleCalc.csproj.CoreCompileInputs.cache
+D:\Lectures\Engines\L1\ConsoleApp1\obj\Debug\net6.0\SimpleCalc.dll
+D:\Lectures\Engines\L1\ConsoleApp1\obj\Debug\net6.0\ref\SimpleCalc.dll
+D:\Lectures\Engines\L1\ConsoleApp1\obj\Debug\net6.0\SimpleCalc.pdb
+D:\Lectures\Engines\L1\ConsoleApp1\obj\Debug\net6.0\SimpleCalc.genruntimeconfig.cache
