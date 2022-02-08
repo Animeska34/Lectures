@@ -3,7 +3,6 @@ using System.Text.Json;
 
 namespace HTMLGenerator
 {
-    //realizuoti struktura kur galima realizuti vet klinikos db kr nurokyta kaip su kokiu guvunu zaisti
     class Program
     {
         class Config
@@ -52,6 +51,7 @@ namespace HTMLGenerator
         static void Generate()
         {
             String[] rootDirs = Directory.GetDirectories(config.path);
+            var tmphtml = File.ReadAllText(config.pageTemplate);
             foreach (var root in rootDirs)
             {
                 
@@ -76,7 +76,11 @@ namespace HTMLGenerator
                     list += GenerateItem(subInfo, link);
                 }
                 Inform($"Saving \"{root}/index.html\"",  ConsoleColor.Green);
-                File.WriteAllText(root + "/index.html", File.ReadAllText(config.pageTemplate).Replace("%list%", list).Replace("%root%", new DirectoryInfo(root).Name));
+                var html = tmphtml;
+                html = html.Replace("%list%", list);
+                html = html.Replace("%root%", new DirectoryInfo(root).Name);
+                html = html.Replace("%timestamp%", DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss"));
+                File.WriteAllText(root + "/index.html", html);
             }
         }
         static void Main()
