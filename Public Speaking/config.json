@@ -1,0 +1,12 @@
+{
+    "path":"../",
+    "pageTemplate":"DirectoryExample.html",
+    "ignore":[
+        "items",
+        ".vs",
+        "HTMLGenerator",
+        "css",
+        "js"
+    ],
+    "output":true
+}
