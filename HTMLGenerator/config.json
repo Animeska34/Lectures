@@ -1,6 +1,8 @@
+
 {
     "path":"../",
     "pageTemplate":"DirectoryExample.html",
+    "sourceLink":"https://github.com/Animeska34/Lectures/tree/master/",
     "ignore":[
         "items",
         ".vs",

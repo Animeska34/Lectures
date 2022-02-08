@@ -10,6 +10,7 @@ namespace HTMLGenerator
         {
             public String path = "";
             public String pageTemplate = "PageTemplate.html";
+            public String sourceLink = "";
             public String itemTemplate = "<li><a href = \"%link%\">%name%</a></li>";
             public List<String> ignore = new List<String>();
             public Boolean output = false;
@@ -37,32 +38,30 @@ namespace HTMLGenerator
             return false;
         }
 
-        static string GenerateItem(DirectoryInfo itemPath)
+        static string GenerateItem(DirectoryInfo itemPath, String link)
         {
             Inform($"Adding \"{itemPath.Name}\" to item list");
             String result = String.Empty;
             if(File.Exists(itemPath.FullName + "/index.html"))
-                result = config.itemTemplate.Replace("%link%", itemPath.FullName + "/index.html");
+                result = config.itemTemplate.Replace("%link%", itemPath.Name + "/index.html");
             else
-                result = config.itemTemplate.Replace("%link%", itemPath.FullName);
+                result = config.itemTemplate.Replace("%link%", link + itemPath.Name + "/");
             result = result.Replace("%name%", itemPath.Name);
             return result;
         }
         static void Generate()
         {
             String[] rootDirs = Directory.GetDirectories(config.path);
-            String mainItems = String.Empty;
             foreach (var root in rootDirs)
             {
+                
                 DirectoryInfo rootInfo = new(root);
                 if (Ignore(rootInfo))
                 {
                     Inform($"Ignoring directory \"{root}\"", ConsoleColor.Red);
                     continue;
                 }
-
-                mainItems += GenerateItem(rootInfo);
-
+                String link = config.sourceLink + rootInfo.Name + "/";
                 Inform($"Analyzing sudirectories for \"{root}\"", ConsoleColor.Blue);
                 String list = String.Empty;
                 String[] subDirs = Directory.GetDirectories(root);
@@ -74,7 +73,7 @@ namespace HTMLGenerator
                         Inform($"Ignoring sub directory \"{sub}\"", ConsoleColor.Red);
                         continue;
                     }
-                    list += GenerateItem(subInfo);
+                    list += GenerateItem(subInfo, link);
                 }
                 Inform($"Saving \"{root}/index.html\"",  ConsoleColor.Green);
                 File.WriteAllText(root + "/index.html", File.ReadAllText(config.pageTemplate).Replace("%list%", list).Replace("%root%", new DirectoryInfo(root).Name));
