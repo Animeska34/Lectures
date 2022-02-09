@@ -5,13 +5,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>%root%</title>
-    <link rel="stylesheet" href="../css/dark.css">
+    <link rel="stylesheet" href="../../css/dark.css">
+    <link rel="stylesheet" href="../../css/monokai-sublime.css">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/highlight.min.js"></script>
 </head>
 
-<body>
-    <iframe src="../items/navbar.html" seamless></iframe>
+<body onload="hljs.highlightAll();">
+    <iframe src="../../items/navbar.html" seamless></iframe>
     <h1>%root%</h1>
-    <ul>
+    <ul style="text-align: left;">
         %list%
     </ul>
     <footer>

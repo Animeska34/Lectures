@@ -1,14 +1,28 @@
 {
     "path":"../",
-    "pageTemplate":"DirectoryExample.html",
+    "directoryTemplate":"DirectoryExample.html",
+    "pageTemplate":"PageExample.html",
     "sourceLink":"https://github.com/Animeska34/Lectures/tree/master/",
-    "ignore":[
+    "rawLink":"https://raw.githubusercontent.com/Animeska34/Lectures/master/",
+    "linkTemplate" : "<li><a href = \"%link%\">%name%</a></li>",
+    "unsupportedDataTemplate" : "<li><a href = \"%link%\">%name%</a></li>",
+    "rawDataTemplates":{
+        ".cs":"<li><details><summary>%name%</summary><div class=\"code\"><pre><code class=\"language-csharp\">%content%</code></pre></div></details></li>",
+        ".js":"<li><details><summary>%name%</summary><pre><div class=\"code\"><code class=\"language-js\">%content%</code></div></pre></details></li>",
+        ".png":"<li><details><summary>%name%</summary><img height = \"200\" title=\"%name%\" src=\"%link%\"></img></details></li>",
+        ".jpg":"<li><details><summary>%name%</summary><img height = \"200\" title=\"%name%\" src=\"%link%\"></img></details></li>"
+    },
+    "ignoreFolders":[
         "items",
         ".vs",
         ".git",
         "HTMLGenerator",
         "css",
         "js"
+    ],
+    "ignoreFiles":[
+        ".sln",
+        ".csproj"
     ],
     "output":true
 }

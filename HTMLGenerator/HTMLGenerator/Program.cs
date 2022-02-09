@@ -7,15 +7,24 @@ namespace HTMLGenerator
     {
         class Config
         {
-            public String path = "";
+            public String path = String.Empty;
             public String pageTemplate = "PageTemplate.html";
-            public String sourceLink = "";
-            public String itemTemplate = "<li><a href = \"%link%\">%name%</a></li>";
-            public List<String> ignore = new List<String>();
+            public String directoryTemplate = "DirectoryTemplate.html";
+            public String sourceLink = String.Empty;
+            public String linkTemplate = "<li><a href = \"%link%\">%name%</a></li>";
+            public String unsupportedDataTemplate = "<li><a href = \"%link%\">%name%</a></li>";
+            public List<String> ignoreFolders = new List<String>();
+            public List<String> ignoreFiles = new List<String>();
             public Boolean output = false;
+            public String rawLink = String.Empty;
+            public Dictionary<String, String> rawDataTemplates = new Dictionary<String, String>();
         }
 
         static Config config = new();
+        static string tmphtml = String.Empty;
+        static string tmppage = String.Empty;
+
+        static List<String> generated = new();
         static void Inform(string content, ConsoleColor color = ConsoleColor.White)
         {
 
@@ -29,7 +38,7 @@ namespace HTMLGenerator
         }
         static Boolean Ignore(DirectoryInfo dir)
         {
-            foreach (var item in config.ignore)
+            foreach (var item in config.ignoreFolders)
             {
                 if (item == dir.Name)
                     return true;
@@ -37,21 +46,72 @@ namespace HTMLGenerator
             return false;
         }
 
+        static Boolean Ignore(FileInfo file)
+        {
+            foreach (var item in config.ignoreFiles)
+            {
+                if (item == file.Extension || file.Name == "index.html")
+                    return true;
+            }
+            return false;
+        }
+
         static string GenerateItem(DirectoryInfo itemPath, String link)
         {
-            Inform($"Adding \"{itemPath.Name}\" to item list");
+            Inform($"\tAdding \"{itemPath.Name}\" to item list");
             String result = String.Empty;
             if(File.Exists(itemPath.FullName + "/index.html"))
-                result = config.itemTemplate.Replace("%link%", itemPath.Name + "/index.html");
+                result = config.linkTemplate.Replace("%link%", itemPath.Name + "/index.html");
             else
-                result = config.itemTemplate.Replace("%link%", link + itemPath.Name + "/");
+                result = config.linkTemplate.Replace("%link%", link + itemPath.Name + "/");
             result = result.Replace("%name%", itemPath.Name);
             return result;
+        }
+
+        static Boolean TryGeneratePage(DirectoryInfo directory, String rawLink)
+        {
+            if (File.Exists(directory.FullName + "/index.html") && !generated.Contains(directory.Name))
+                return false;
+            Inform($"\t\tStarting generating page for {directory.Name}", ConsoleColor.Blue);
+            if (!generated.Contains(directory.Name))
+            {
+                Inform($"\t\tDirectory {directory.Name} missing in registry. Adding...", ConsoleColor.DarkYellow);
+                generated.Add(directory.Name);
+            }
+            String list = String.Empty;
+            foreach (var item in Directory.GetFiles(directory.FullName))
+            {
+                FileInfo file = new FileInfo(item);
+                if(Ignore(file))
+                {
+                    Inform($"\t\tIgnoring {file.Name}", ConsoleColor.Red);
+                    continue;
+                }
+                Inform($"\t\tProcessing {file.Name}");
+                if (config.rawDataTemplates.ContainsKey(file.Extension))
+                {
+                    list += config.rawDataTemplates[file.Extension].Replace("%link%", rawLink + directory.Name + "/" + file.Name).Replace("%name%", file.Name).Replace("%content%", File.ReadAllText(file.FullName));
+                }
+                else
+                {
+                    Inform($"\t\tTemplate for {file.Extension} not found, using universal template", ConsoleColor.DarkYellow);
+                    list += config.unsupportedDataTemplate.Replace("%link%", rawLink + directory.Name + "/" + file.Name).Replace("%name%", file.Name).Replace("%content%", File.ReadAllText(file.FullName));
+                }
+            }
+            Inform($"\t\tSaving \"{directory.Name}/index.html\"", ConsoleColor.Green);
+            var html = tmppage;
+            html = html.Replace("%list%", list);
+            html = html.Replace("%root%", directory.Name);
+            html = html.Replace("%timestamp%", DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss"));
+            File.WriteAllText(directory.FullName + "/index.html", html);
+            return true;
         }
         static void Generate()
         {
             String[] rootDirs = Directory.GetDirectories(config.path);
-            var tmphtml = File.ReadAllText(config.pageTemplate);
+            tmphtml = File.ReadAllText(config.directoryTemplate);
+            tmppage = File.ReadAllText(config.pageTemplate);
+
             foreach (var root in rootDirs)
             {
                 
@@ -62,6 +122,7 @@ namespace HTMLGenerator
                     continue;
                 }
                 String link = config.sourceLink + rootInfo.Name + "/";
+                String rawLink = config.rawLink + rootInfo.Name + "/";
                 Inform($"Analyzing sudirectories for \"{root}\"", ConsoleColor.Blue);
                 String list = String.Empty;
                 String[] subDirs = Directory.GetDirectories(root);
@@ -70,9 +131,18 @@ namespace HTMLGenerator
                     DirectoryInfo subInfo = new(sub);
                     if (Ignore(subInfo))
                     {
-                        Inform($"Ignoring sub directory \"{sub}\"", ConsoleColor.Red);
+                        Inform($"\tIgnoring sub directory \"{sub}\"", ConsoleColor.Red);
                         continue;
                     }
+                    if(Directory.GetFiles(subInfo.FullName).Length == 0)
+                    {
+                        if (Ignore(subInfo))
+                        {
+                            Inform($"\tSub directory \"{sub}\" is empty, ignoring", ConsoleColor.DarkYellow);
+                            continue;
+                        }
+                    }
+                    TryGeneratePage(subInfo, rawLink);
                     list += GenerateItem(subInfo, link);
                 }
                 Inform($"Saving \"{root}/index.html\"",  ConsoleColor.Green);
@@ -91,18 +161,32 @@ namespace HTMLGenerator
                 var options = new JsonSerializerOptions();
                 options.IncludeFields = true;
                 var tmp = JsonSerializer.Deserialize<Config>(File.ReadAllText("config.json"), options);
-                if(tmp!= null)
+                
+                if (tmp!= null)
                     config = tmp;
-                if (File.Exists(config.pageTemplate) && Directory.Exists(config.path))
+
+                if (File.Exists("generated.json"))
+                {
+                    var genTmp = JsonSerializer.Deserialize<List<string>>(File.ReadAllText("generated.json"), options);
+                    if (genTmp != null)
+                        generated = genTmp;
+                }
+                if (File.Exists(config.pageTemplate) && File.Exists(config.directoryTemplate) && Directory.Exists(config.path))
+                {
                     Generate();
+                    File.WriteAllText("generated.json", JsonSerializer.Serialize(generated, options));
+                }
                 else
                 {
-                    Console.WriteLine($"ERROR: \"{config.path}\" or \"{config.pageTemplate}\" not exists");
+                    Console.WriteLine($"ERROR: \"{config.path}\" or \"{config.pageTemplate}\" or \"{config.directoryTemplate}\" not exists");
                     Console.ReadKey();
                     return;
                 }
                 if (config.output)
+                {
+                    Inform("All tasks complete. Press any key to continue...");
                     Console.ReadKey();
+                }
             }
             else
             {
