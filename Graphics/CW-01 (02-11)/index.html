@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<head>
+    <title>CW-01 (02-11)</title>
+    <link rel="stylesheet" href="../../css/dark.css">
+</head>
+
+<body>
+    <h3>Task 1: Lyginiu skaichu kvadratai</h3>
+    <form>
+        <input id="min" title="minNumber" type="number" min="0" value="0"></input>
+        <input id="max" title="maxNumber" type="number" max="100" value="20"></input>
+        <button type="button" onclick="Update()">Proceed</button>
+    </form>
+    <!--
+    <table id="table">
+        <tr>
+            <th>Number</th>
+            <th>Square</th>
+        </tr>
+    </table>
+-->
+
+<div id="tables">
+
+
+</div>
+    <script>
+
+function Update() {
+            var min = Number(document.getElementById("min").value);
+            var max = Number(document.getElementById("max").value);
+            document.getElementById("tables").innerHTML = "";
+            CreateTable(min, max);
+        }
+
+        function Create() {
+            var min = Number(document.getElementById("min").value);
+            var max = Number(document.getElementById("max").value);
+            CreateTable(min, max);
+        }
+        function CreateTable(min, max) {
+            //Task 1: Lyginiu skaichu kvadratai
+            //var table = document.getElementById("table");
+            var tableArea = document.getElementById("tables");
+            var table = "<table><tr> <th>Number</th><th>Square</th></tr>";
+            for (var x = min; x <= max; x++) {
+                if (x % 2 == 0) {
+                    
+                    //table.insertAdjacentHTML("beforeend", "<tr><td>" + x + "</td><td>" + (x * x) + "</td></tr>");
+                    table += "<tr><td>" + x + "</td><td>" + (x * x) + "</td></tr>";
+                }
+            } 
+            table+= "</table>";
+            tableArea.insertAdjacentHTML("beforeend",table);
+        }
+
+    </script>
+</body>

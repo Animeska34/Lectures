@@ -97,3 +97,18 @@ a.button:hover{
     font-size: 14px;
     font-family: "Cascadia Mono", "Roboto", "Arial";
 }
+
+table {
+    border: 1px solid orange;
+    border-radius: 5px;
+}
+
+td, th{
+    border-bottom: 1px dotted orange;
+    border-right: 1px dotted orange;
+    text-align: center;
+}
+.container{
+    display: flex;
+    flex-direction: row;
+}
