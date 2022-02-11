@@ -21,19 +21,15 @@
     </table>
 -->
 
-<div id="tables">
-
-
-</div>
+    <div id="tables">
+    </div>
     <script>
-
-function Update() {
+        function Update() {
             var min = Number(document.getElementById("min").value);
             var max = Number(document.getElementById("max").value);
             document.getElementById("tables").innerHTML = "";
             CreateTable(min, max);
         }
-
         function Create() {
             var min = Number(document.getElementById("min").value);
             var max = Number(document.getElementById("max").value);
@@ -43,17 +39,18 @@ function Update() {
             //Task 1: Lyginiu skaichu kvadratai
             //var table = document.getElementById("table");
             var tableArea = document.getElementById("tables");
+            if (max > 10000)
+                max = 10000;
             var table = "<table><tr> <th>Number</th><th>Square</th></tr>";
             for (var x = min; x <= max; x++) {
                 if (x % 2 == 0) {
-                    
+
                     //table.insertAdjacentHTML("beforeend", "<tr><td>" + x + "</td><td>" + (x * x) + "</td></tr>");
                     table += "<tr><td>" + x + "</td><td>" + (x * x) + "</td></tr>";
                 }
-            } 
-            table+= "</table>";
-            tableArea.insertAdjacentHTML("beforeend",table);
+            }
+            table += "</table>";
+            tableArea.insertAdjacentHTML("beforeend", table);
         }
-
     </script>
 </body>
