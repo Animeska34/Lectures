@@ -18,11 +18,14 @@
         ".git",
         "HTMLGenerator",
         "css",
-        "js"
+        "js",
+        "WinUI TestApp (Package)"
     ],
     "ignoreFiles":[
         ".sln",
-        ".csproj"
+        ".csproj",
+        ".manifest",
+        ".user"
     ],
     "output":true
 }
