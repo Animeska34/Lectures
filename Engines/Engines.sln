@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HW-01 SimpleCalc", "HW-01 SimpleCalc\HW-01 - SimpleCalc.csproj", "{4E27ED86-675E-443B-A0FB-3FA59C5358DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HW-01 - SimpleCalc", "HW-01 SimpleCalc\HW-01 - SimpleCalc.csproj", "{4E27ED86-675E-443B-A0FB-3FA59C5358DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CW-01 Action, event, Func", "CW-01 Action, event, Func\CW-01 Action, event, Func.csproj", "{21A541FC-41AF-4E32-AE64-053674E25FA5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CW-01 Action, event, Func", "CW-01 Action, event, Func\CW-01 Action, event, Func.csproj", "{21A541FC-41AF-4E32-AE64-053674E25FA5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CW-02 Animals", "CW-02 Animals\CW-02 Animals.csproj", "{FCB74741-ADA9-4F65-BADB-2B56AD4C8540}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CW-02 Animals", "CW-02 Animals\CW-02 Animals.csproj", "{FCB74741-ADA9-4F65-BADB-2B56AD4C8540}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HW-02 AnimalHospital", "HW-02 AnimalHospital\HW-02 AnimalHospital.csproj", "{2502F400-BF31-40C7-80D1-FD545631A27D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{FCB74741-ADA9-4F65-BADB-2B56AD4C8540}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FCB74741-ADA9-4F65-BADB-2B56AD4C8540}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCB74741-ADA9-4F65-BADB-2B56AD4C8540}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2502F400-BF31-40C7-80D1-FD545631A27D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2502F400-BF31-40C7-80D1-FD545631A27D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2502F400-BF31-40C7-80D1-FD545631A27D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2502F400-BF31-40C7-80D1-FD545631A27D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

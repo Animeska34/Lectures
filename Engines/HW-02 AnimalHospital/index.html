@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>HW-02 AnimalHospital</title>
+    <link rel="stylesheet" href="../../css/dark.css">
+    <link rel="stylesheet" href="../../css/monokai-sublime.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/highlight.min.js"></script>
+</head>
+
+<body onload="hljs.highlightAll();">
+    <iframe src="../../items/navbar.html" seamless></iframe>
+    <h1>HW-02 AnimalHospital</h1>
+    <ul style="text-align: left;">
+        <li><details><summary>Animals.cs</summary><div class="code"><pre><code class="language-csharp">using System;
+
+namespace AnimalHospital
+{
+    public enum VisitType
+    {
+        Diagnostics,
+        Operation,
+        MedicalTreatment,
+        Consultation,
+        Other
+    }
+    public enum Diagnosis
+    {
+        Undefined,
+        Anthrax,
+        BlackQuarter,
+        FootAndMouthDisease,
+        Rabies,
+        BlueTongue,
+        Pox,
+        BrucellosisOfSheep,
+        Tetanus,
+        Other
+    }
+    public enum BodyPart
+    {
+        Head,
+        LeftEye,
+        RightEye,
+        LeftMimi,
+        RightMimi,
+        Mouth,
+        Nose,
+        Neck,
+        Chest,
+        Stomach,
+        LeftBackLeg,
+        RightBackLeg,
+        LeftFrontLeg,
+        RightFrontLeg,
+        LeftArm,
+        RightArm,
+        Tail,
+        LeftHorn,
+        RightHorn
+    }
+    public class Animal
+    {
+
+        public VisitType visitType = VisitType.Diagnostics;
+        public Diagnosis diagnosis = Diagnosis.Undefined;
+        public List<BodyPart> affectedParts = new List<BodyPart>();
+
+        private String name = String.Empty;
+        public String Name
+        {
+            get { return name; }
+            set
+            {
+                if (name == String.Empty)
+                    name = value;
+            }
+        }
+        public Int32 TimeRemains { get; private set; } = 0;
+        private void Update()
+        {
+            TimeRemains--;
+        }
+
+        public virtual BodyPart[] BodyParts()
+        {
+            return Enum.GetValues<BodyPart>();
+        }
+        public String[] BodyPartsAsString()
+        {
+            List<BodyPart> parts = new List<BodyPart>(BodyParts());
+            List<String> partsString = new List<String>();
+            foreach (var item in parts)
+            {
+                partsString.Add(item.ToString());
+            }
+            return partsString.ToArray();
+        }
+
+        public void Register(Program p)
+        {
+            TimeRemains = p.animals.Count;
+            p.Update += Update;
+        }
+        public virtual void Roar()
+        {
+            Console.WriteLine("Zzzz");
+        }
+        public override string ToString()
+        {
+            String tmp;
+            if (diagnosis == Diagnosis.Undefined)
+                tmp = $"Animal {Name} {visitType}\nAffected body parts:\n";
+            else
+                tmp = $"Animal {Name} with {diagnosis} {visitType}\nAffected body parts:\n";
+            foreach (var item in affectedParts)
+                tmp += item.ToString() + "\n";
+            return tmp;
+        }
+    }
+    public class Boozer : Animal
+    {
+        public override void Roar()
+        {
+            Console.WriteLine("Blew-Blew");
+        }
+        public override BodyPart[] BodyParts()
+        {
+            return new BodyPart[] {
+                BodyPart.Head,
+                BodyPart.LeftEye,
+                BodyPart.RightEye,
+                BodyPart.LeftMimi,
+                BodyPart.RightMimi,
+                BodyPart.Mouth,
+                BodyPart.Nose,
+                BodyPart.Neck,
+                BodyPart.Chest,
+                BodyPart.Stomach,
+                BodyPart.LeftBackLeg,
+                BodyPart.RightBackLeg,
+                BodyPart.LeftArm,
+                BodyPart.RightArm
+            };
+        }
+        public override string ToString()
+        {
+            return base.ToString().Replace("Animal", "Boozer");
+        }
+    }
+    public class Ookami : Animal
+    {
+        public override void Roar()
+        {
+            Console.WriteLine("U-u-u-u");
+        }
+
+        public override BodyPart[] BodyParts()
+        {
+            return new BodyPart[] {
+                BodyPart.Head,
+                BodyPart.LeftEye,
+                BodyPart.RightEye,
+                BodyPart.LeftMimi,
+                BodyPart.RightMimi,
+                BodyPart.Mouth,
+                BodyPart.Nose,
+                BodyPart.Neck,
+                BodyPart.Chest,
+                BodyPart.Stomach,
+                BodyPart.LeftBackLeg,
+                BodyPart.RightBackLeg,
+                BodyPart.LeftFrontLeg,
+                BodyPart.RightFrontLeg,
+                BodyPart.Tail
+            };
+        }
+
+        public override string ToString()
+        {
+            return base.ToString().Replace("Animal", "Ookami");
+        }
+    }
+    public class Tanuki : Ookami
+    {
+        public override void Roar()
+        {
+            Console.WriteLine("Pon-Pon");
+        }
+        public override string ToString()
+        {
+            return base.ToString().Replace("Ookami", "Tanuki");
+        }
+    }
+    public class Dog : Ookami
+    {
+        public override void Roar()
+        {
+            Console.WriteLine("Gav-Gav");
+        }
+        public override string ToString()
+        {
+            return base.ToString().Replace("Ookami", "Dog");
+        }
+    }
+    public class Fox : Ookami
+    {
+        public override void Roar()
+        {
+            Console.WriteLine("Kon-Kon");
+        }
+        public override string ToString()
+        {
+            if (diagnosis == Diagnosis.Undefined)
+                return $"Fox {Name} {visitType}";
+            else
+                return $"Fox {Name} with {diagnosis} {visitType}";
+        }
+    }
+    public class Neko : Animal
+    {
+        public override void Roar()
+        {
+            Console.WriteLine("Meow-Meow");
+        }
+        public override BodyPart[] BodyParts()
+        {
+            return new BodyPart[] {
+                BodyPart.Head,
+                BodyPart.LeftEye,
+                BodyPart.RightEye,
+                BodyPart.LeftMimi,
+                BodyPart.RightMimi,
+                BodyPart.Mouth,
+                BodyPart.Nose,
+                BodyPart.Neck,
+                BodyPart.Chest,
+                BodyPart.Stomach,
+                BodyPart.LeftBackLeg,
+                BodyPart.RightBackLeg,
+                BodyPart.LeftFrontLeg,
+                BodyPart.RightFrontLeg,
+                BodyPart.Tail
+            };
+        }
+        public override string ToString()
+        {
+            return base.ToString().Replace("Animal", "Neko");
+        }
+    }
+    public class Tiger : Neko
+    {
+        public override void Roar()
+        {
+            Console.WriteLine("R-r-r-r");
+        }
+        public override string ToString()
+        {
+            return base.ToString().Replace("Neko", "Tiger");
+        }
+    }
+    public class Usagi : Animal
+    {
+        public override void Roar()
+        {
+            Console.WriteLine("????????????");
+        }
+        public override BodyPart[] BodyParts()
+        {
+            return new BodyPart[] {
+                BodyPart.Head,
+                BodyPart.LeftEye,
+                BodyPart.RightEye,
+                BodyPart.LeftMimi,
+                BodyPart.RightMimi,
+                BodyPart.Mouth,
+                BodyPart.Nose,
+                BodyPart.Neck,
+                BodyPart.Chest,
+                BodyPart.Stomach,
+                BodyPart.LeftBackLeg,
+                BodyPart.RightBackLeg,
+                BodyPart.LeftFrontLeg,
+                BodyPart.RightFrontLeg,
+                BodyPart.Tail
+            };
+        }
+        public override string ToString()
+        {
+            return base.ToString().Replace("Animal", "Usagi");
+        }
+    }
+}</code></pre></div></details></li><li><details><summary>Program.cs</summary><div class="code"><pre><code class="language-csharp">using System;
+using CUI;
+
+namespace AnimalHospital
+{
+    public class Program
+    {
+        //Animal queue
+        public List<Animal> animals = new List<Animal>();
+        //Calling update for all animals
+        public delegate void UpdateTime();
+        public event UpdateTime? Update;
+
+        public Animal? Next()
+        {
+            if (animals.Count > 0)
+            {
+                var patient = animals[0];
+                animals.RemoveAt(0);
+                return patient;
+            }
+            else return null;
+        }
+
+        public void Register()
+        {
+            //Selecting animal
+            Console.Clear();
+            Console.WriteLine("Please select animal");
+            Selector selector = new(new String[] { "Boozer", "Ookami", "Tanuki", "Fox", "Dog", "Neko", "Tiger", "Usagi", "Other" });
+            selector.ElementWidth = 25;
+            selector.ESCReturn = false;
+            var selection = selector.Show();
+
+            //Setting name
+            Console.Clear();
+            Console.WriteLine($"Please enter name of {selection}");
+            var name = Console.ReadLine();
+            Console.Clear();
+            Animal animal = selection switch
+            {
+                "Boozer" => new Boozer(),
+                "Ookami" => new Ookami(),
+                "Tanuki" => new Tanuki(),
+                "Dog" => new Dog(),
+                "Fox" => new Fox(),
+                "Neko" => new Neko(),
+                "Tiger" => new Tiger(),
+                "Usagi" => new Usagi(),
+                _ => new Animal(),
+            };
+            animal.Name = name ?? String.Empty;
+
+            //Setting visit type
+            selector.Clear();
+            selector.Add(Enum.GetNames<VisitType>());
+            Console.Clear();
+            Console.WriteLine("Please select visit type");
+            Enum.TryParse(selector.Show(), out animal.visitType);
+
+            if (animal.visitType != VisitType.Diagnostics)
+            {
+                //Setting diagnosis
+                selector.Clear();
+                selector.Add(Enum.GetNames<Diagnosis>());
+                Console.Clear();
+                Console.WriteLine("Please select diagnosis");
+                Enum.TryParse(selector.Show(), out animal.diagnosis);
+            }
+
+            //Setting affected body parts
+            selector.Clear();
+            var parts = animal.BodyPartsAsString();
+            var count = parts.Length - 1;
+            selector.Add(parts);
+            selector.ESCReturn = true;
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("Please select single or multi affected body parts.\nPress ESC to continue.\n");
+                selection = selector.Show();
+                if (selection == "" || count <= 0)
+                    break;
+                count--;
+                animal.affectedParts.Add(Enum.Parse<BodyPart>(selection));
+                selector.Remove(selection);
+            }
+            Console.WriteLine("Registered");
+            //Finishing registration
+            animal.Register(this);
+            animals.Add(animal);
+            Console.Clear();
+            Console.WriteLine($"{animal}\nWas registered as {animals.Count} patient");
+            Console.ReadKey();
+            Console.Clear();
+        }
+
+        static void Main()
+        {
+            Program program = new();
+            Selector selector = new(new String[] { "Next patient", "Register new patient" });
+            selector.ElementWidth = 25;
+            selector.ESCReturn = true;
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine($"Pacients remainig: {program.animals.Count}");
+                var selection = selector.Show();
+                switch (selection)
+                {
+                    case "Next patient":
+                        var patient = program.Next();
+                        Console.Clear();
+                        Console.WriteLine(patient != null ? $"Next pacient: {patient}" : "No patients");
+                        Console.ReadKey();
+                        program.Update?.Invoke();
+                        break;
+                    case "Register new patient":
+                        program.Register();
+                        break;
+                    case "":
+                        return;
+                }
+            }
+
+        }
+    }
+}</code></pre></div></details></li>
+    </ul>
+    <footer>
+        Page generated by <a
+            href="https://github.com/Animeska34/Lectures/tree/master/HTMLGenerator">HTMLGenerator</a><br>
+        Page updated: <b>02/15/2022 11:03:02</b>
+    </footer>
+</body>
+
+</html>
