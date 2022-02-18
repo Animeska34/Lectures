@@ -1,0 +1,56 @@
+<!DOCTYPE="html">
+    <html>
+
+    <head>
+        <link rel="stylesheet" href="../../css/dark.css"/>
+        <title>CW-02</title>
+    </head>
+
+    <body>
+        <h1>CW-02</h1>
+        <h2>ArrayExample</h2>
+        <div id="array"></div>
+        <h2>JSON Example</h2>
+        <div id="jsonExample"></div>
+
+
+        <script>
+            var auto = ["Mercedes", "Audi", "ZAZ"];
+            var arrayElement = document.getElementById("array");
+            for(var i = 0; i < auto.length; i++){
+                arrayElement.insertAdjacentHTML("beforeend", auto[i] + "<br>");
+                }
+            
+                var jsonExample = {
+                    "name": "Jonas",
+                    "age" : 66,
+                    "dalykai" : [
+                        {
+                            "name":"Matematika",
+                            "kreditai":3
+                        },
+                        {
+                            "name":"C Lang",
+                            "kreditai":3
+                        }
+                    ]
+                }
+                var jsonExampleElem = document.getElementById("jsonExample");
+                jsonExampleElem.insertAdjacentHTML("beforeend", 
+                "Name: " + jsonExample.name + "<br>" +
+                "Dal: " + jsonExample.dalykai[1].name
+                );
+
+                var newStudent = new Object();
+                newStudent.id = 666;
+                newStudent.name = "Petras";
+                newStudent.age = 44;
+                newStudent.dalykai = new Array();
+                newStudent.dalykai[0].name = "Matematika";
+                newStudent.dalykai[0].kreditai = 3;
+                newStudent.dalykai[1].name = "C land";
+                newStudent.dalykai[1].kreditai = 3;
+        </script>
+    </body>
+
+    </html>

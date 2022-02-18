@@ -90,12 +90,12 @@ namespace HTMLGenerator
                 Inform($"\t\tProcessing {file.Name}");
                 if (config.rawDataTemplates.ContainsKey(file.Extension))
                 {
-                    list += config.rawDataTemplates[file.Extension].Replace("%link%", rawLink + directory.Name + "/" + file.Name).Replace("%name%", file.Name).Replace("%content%", File.ReadAllText(file.FullName));
+                    list += config.rawDataTemplates[file.Extension].Replace("%link%", file.Name).Replace("%name%", file.Name).Replace("%content%", File.ReadAllText(file.FullName)).Replace("%rawLink%", rawLink + directory.Name + "/" + file.Name);
                 }
                 else
                 {
                     Inform($"\t\tTemplate for {file.Extension} not found, using universal template", ConsoleColor.DarkYellow);
-                    list += config.unsupportedDataTemplate.Replace("%link%", rawLink + directory.Name + "/" + file.Name).Replace("%name%", file.Name).Replace("%content%", File.ReadAllText(file.FullName));
+                    list += config.unsupportedDataTemplate.Replace("%link%", file.Name).Replace("%name%", file.Name).Replace("%content%", File.ReadAllText(file.FullName)).Replace("%rawLink%", rawLink + directory.Name + "/" + file.Name);
                 }
             }
             Inform($"\t\tSaving \"{directory.Name}/index.html\"", ConsoleColor.Green);
