@@ -7,8 +7,9 @@
     "linkTemplate" : "<li><a href = \"%link%\">%name%</a></li>",
     "unsupportedDataTemplate" : "<li><a href = \"%link%\">%name%</a></li>",
     "rawDataTemplates":{
-        ".cs":"<li><details><summary>%name%</summary><div class=\"code\"><pre><code class=\"language-csharp\">%content%</code></pre></div></details></li>",
-        ".js":"<li><details><summary>%name%</summary><pre><div class=\"code\"><code class=\"language-js\">%content%</code></div></pre></details></li>",
+        ".cs":"<li><details><summary>%name%</summary><div class=\"code\"><pre><code class=\"language-csharp\"><textarea>%content%</textarea></code></pre></div></details></li>",
+        ".xaml":"<li><details><summary>%name%</summary><div class=\"code\"><pre><code class=\"language-xml\"><textarea>%content%</textarea></code></pre></div></details></li>",
+        ".js":"<li><details><summary>%name%</summary><pre><div class=\"code\"><code class=\"language-js\"><textarea>%content%</textarea></code></div></pre></details></li>",
         ".png":"<li><details><summary>%name%</summary><img height = \"200\" title=\"%name%\" src=\"%link%\"></img></details></li>",
         ".jpg":"<li><details><summary>%name%</summary><img height = \"200\" title=\"%name%\" src=\"%link%\"></img></details></li>"
     },
