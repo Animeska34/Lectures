@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+html{
+    font-family: arial;
+    font-family:'UD Digi Kyokasho NP-R', 'Nunito', 'Segoe UI', "Arial", sans-serif; 
+}
+body{
+    margin: 0px;
+}
+header{
+    background-image:url("http://www.freeliquidtemplates.com/free-headers-for-websites/header4.jpg");
+    background-size: cover;
+    padding:25px;
+}
+
+header img{
+    height: 50px;
+    filter: invert(100%);
+}
+
+nav{
+    margin: 10px;
+    background-color: rgb(65, 65, 182);
+    position: relative;
+}
+nav ul {
+    padding: 0px;
+}
+nav>ul>li {
+    color:white;
+    list-style-type: none;
+    display: inline-block;
+    padding: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+nav li:hover{
+    background-color:rgb(26, 120, 202);
+}
+
+nav>ul>li:first-child:hover ul.subMenu{
+    display: block;
+}
+ul.subMenu{
+    display: none;
+    position: absolute;
+    background-color: rgb(65, 65, 182);
+}
+ul.subMenu>li{
+    padding: 5px;
+}
+
+.content:after, .right:after{
+content: "";
+display: table;
+clear: both;
+}
+
+.left {
+    width: 20%;
+    border: 1px solid gray;
+    padding: 50px, 20px, 300px, 20px;
+    float: left;
+}
+.left a {
+    display: block;
+}
+.right{
+    width: 75%;
+    border: 1px solid gray;
+    margin-left: 22%;
+}
+.right article{
+    float: left;
+    width: 28%;
+    padding: 20px;
+    text-align: justify;
+}
+
+footer{
+    background-image: linear-gradient(navy, white);
+    padding: 10px;
+    margin-top: 20px;
+}
+
+footer img {
+    height: 50px;
+}
+footer>span {
+    display: none;
+}
+
+@media screen and (max-width:600px) {
+    nav>ul>li {
+        display: block;
+        width: auto;
+        margin-right: 0px;
+        border-bottom: 1px solid white;
+    }
+    .left{
+        float:none;
+        width:auto;
+        height: auto;
+    }
+    .right{
+        margin-top: 20px;
+        margin-left: 0px;
+        width: auto;
+    }
+    .content{
+        margin: 10px;
+    }
+    .right article{
+        float:none;
+        width: auto;
+    }
+    footer>span {
+        display: block;
+    }
+
+    footer{
+        text-align: center;
+    }
+
+}
