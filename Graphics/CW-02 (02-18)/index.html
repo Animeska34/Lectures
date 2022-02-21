@@ -18,7 +18,7 @@
     <html>
 
     <head>
-        <link rel="stylesheet" href="../../css/dark.css"/>
+        <link rel="stylesheet" href="../../css/dark.css" />
         <title>CW-02</title>
     </head>
 
@@ -28,44 +28,121 @@
         <div id="array"></div>
         <h2>JSON Example</h2>
         <div id="jsonExample"></div>
-
-
         <script>
             var auto = ["Mercedes", "Audi", "ZAZ"];
             var arrayElement = document.getElementById("array");
-            for(var i = 0; i < auto.length; i++){
+            for (var i = 0; i < auto.length; i++) {
                 arrayElement.insertAdjacentHTML("beforeend", auto[i] + "<br>");
-                }
-            
-                var jsonExample = {
-                    "name": "Jonas",
-                    "age" : 66,
-                    "dalykai" : [
-                        {
-                            "name":"Matematika",
-                            "kreditai":3
-                        },
-                        {
-                            "name":"C Lang",
-                            "kreditai":3
-                        }
-                    ]
-                }
-                var jsonExampleElem = document.getElementById("jsonExample");
-                jsonExampleElem.insertAdjacentHTML("beforeend", 
+            }
+
+            var jsonExample = {
+                "name": "Jonas",
+                "age": 66,
+                "dalykai": [
+                    {
+                        "name": "Matematika",
+                        "kreditai": 3
+                    },
+                    {
+                        "name": "C Lang",
+                        "kreditai": 3
+                    }
+                ]
+            }
+            var jsonExampleElem = document.getElementById("jsonExample");
+            jsonExampleElem.insertAdjacentHTML("beforeend",
                 "Name: " + jsonExample.name + "<br>" +
                 "Dal: " + jsonExample.dalykai[1].name
-                );
+            );
 
-                var newStudent = new Object();
-                newStudent.id = 666;
-                newStudent.name = "Petras";
-                newStudent.age = 44;
-                newStudent.dalykai = new Array();
-                newStudent.dalykai[0].name = "Matematika";
-                newStudent.dalykai[0].kreditai = 3;
-                newStudent.dalykai[1].name = "C land";
-                newStudent.dalykai[1].kreditai = 3;
+            var newStudent = new Object();
+            newStudent.id = 666;
+            newStudent.name = "Petras";
+            newStudent.age = 44;
+            newStudent.dalykai = new Array();
+            var dalykas = new Object();
+            dalykas.name = "Matemetika",
+                dalykas.kreditai = 3;
+            newStudent.dalykai[0] = dalykas;
+            dalykas.name = "C lang";
+            newStudent.dalykai[1] = dalykas;
+
+            //Kolegija task
+
+            var kolegija =
+            {
+                "student": [
+                    {
+                        "name": "St1",
+                        "pazymiai": [
+                            2, 2, 5, 7, 8
+                        ],
+                        vidurkis: function () {
+                            let vid = 0;
+                            for (let i = 0; i < this.pazymiai.length; i++) {
+                                vid += this.pazymiai[i];
+                            }
+                            vid /= this.pazymiai.length;
+                            return vid;
+                        }
+                    },
+                    {
+                        "name": "St2",
+                        "pazymiai": [
+                            6, 4, 5, 7, 10
+                        ],
+                        vidurkis: function () {
+                            let vid = 0;
+                            for (let i = 0; i < this.pazymiai.length; i++) {
+                                vid += this.pazymiai[i];
+                            }
+                            vid /= this.pazymiai.length;
+                            return vid;
+                        }
+                    },
+                    {
+                        "name": "St3",
+                        "pazymiai": [
+                            10, 10, 8
+                        ],
+                        vidurkis: function () {
+                            let vid = 0;
+                            for (let i = 0; i < this.pazymiai.length; i++) {
+                                vid += this.pazymiai[i];
+                            }
+                            vid /= this.pazymiai.length;
+                            return vid;
+                        }
+                    }
+                ],
+                bestStudent: function () {
+                    let bestStudent = 0;
+                    let bestVidurkis = 0;
+                    for (let s = 0; s < this.student.length; s++) {
+                        let vid = this.student[s].vidurkis();
+                        if (vid > bestVidurkis) {
+                            bestVidurkis = vid;
+                            bestStudent = s;
+                        }
+                    }
+                    return this.student[bestStudent].name;
+
+                }
+            }
+
+            function bestStudent(k) {
+                let bestStudent = 0;
+                let bestVidurkis = 0;
+                for (let s = 0; s < k.length; s++) {
+                    let vid = vidurkis(k[s].pazymiai);
+                    if (vid > bestVidurkis) {
+                        bestVidurkis = vid;
+                        bestStudent = s;
+                    }
+                }
+                return k[bestStudent].name;
+            }
+
         </script>
     </body>
 
@@ -74,7 +151,7 @@
     <footer>
         Page generated by <a
             href="https://github.com/Animeska34/Lectures/tree/master/HTMLGenerator">HTMLGenerator</a><br>
-        Page updated: <b>02/18/2022 10:16:06</b>
+        Page updated: <b>02/18/2022 11:48:37</b>
     </footer>
 </body>
 
