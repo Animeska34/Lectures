@@ -63,7 +63,8 @@ namespace SkiaGame
                         spriteSheetAnimation.Playing = true;
                     }
                 }
-
+                if (!spriteSheetAnimation.Playing)
+                    spriteSheetAnimation.SetFrame(0);
             }
         }
         public MainWindow()
@@ -74,6 +75,7 @@ namespace SkiaGame
             scene.root.Instantiate().AddComponent<Camera>().SetMain();
             var player = scene.root.Instantiate();
             player.AddComponent<PlayerController>();
+            player.transform.scale = new Vector2(2f, 2f);
             player.transform.position = new Vector2(500, -500);
             scene.Start();
         }
