@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            .container{
+                display: grid;
+                grid-gap: 10px;
+                grid-template-columns:  10% auto 200px;
+                grid-template-rows: 100px 200px auto;
+            }
+            .container>div, header, footer{
+                border: 1px solid black;
+                padding: 40px;
+            }
+            header{
+                grid-column: 1/4;
+            }
+            footer{
+                grid-column: 1/4;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>Header</header>
+            <div>
+                1
+            </div>
+            <div>
+                2
+            </div>
+            <div>
+                3
+            </div>
+            <div>
+                4
+            </div>
+            <footer>Footer</footer>
+        </div>
+    </body>
+</html>

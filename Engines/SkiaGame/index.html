@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SkiaGame</title>
+    <link rel="stylesheet" href="../../css/dark.css">
+    <link rel="stylesheet" href="../../css/monokai-sublime.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/highlight.min.js"></script>
+</head>
+
+<body onload="hljs.highlightAll();">
+    <iframe src="../../items/navbar.html" seamless></iframe>
+    <h1>SkiaGame</h1>
+    <ul style="text-align: left;">
+        <li><details><summary>App.xaml.cs</summary><div class="code"><pre><code class="language-csharp"><textarea>using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
+using Microsoft.UI.Xaml.Data;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Navigation;
+using Microsoft.UI.Xaml.Shapes;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.ApplicationModel;
+using Windows.ApplicationModel.Activation;
+using Windows.Foundation;
+using Windows.Foundation.Collections;
+
+// To learn more about WinUI, the WinUI project structure,
+// and more about our project templates, see: http://aka.ms/winui-project-info.
+
+namespace SkiaGame
+{
+    /// <summary>
+    /// Provides application-specific behavior to supplement the default Application class.
+    /// </summary>
+    public partial class App : Application
+    {
+        /// <summary>
+        /// Initializes the singleton application object.  This is the first line of authored code
+        /// executed, and as such is the logical equivalent of main() or WinMain().
+        /// </summary>
+        public App()
+        {
+            this.InitializeComponent();
+        }
+
+        /// <summary>
+        /// Invoked when the application is launched normally by the end user.  Other entry points
+        /// will be used such as when the application is launched to open a specific file.
+        /// </summary>
+        /// <param name="args">Details about the launch request and process.</param>
+        protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
+        {
+            m_window = new MainWindow();
+            m_window.Activate();
+        }
+
+        private Window m_window;
+    }
+}
+</textarea></code></pre></div></details></li><li><details><summary>MainWindow.xaml.cs</summary><div class="code"><pre><code class="language-csharp"><textarea>using System;
+using Windows.System;
+using Microsoft.UI.Xaml;
+
+using SS2DE;
+using SS2DE.Graphics;
+using SS2DE.Components;
+
+// To learn more about WinUI, the WinUI project structure,
+// and more about our project templates, see: http://aka.ms/winui-project-info.
+
+namespace SkiaGame
+{
+    /// <summary>
+    /// An empty window that can be used on its own or navigated to within a Frame.
+    /// </summary>
+    public sealed partial class MainWindow : Window
+    {
+        class PlayerController : Component
+        {
+            SpriteSheetAnimation spriteSheetAnimation;
+            Single speed = 75;
+            protected override void Setup()
+            {
+                spriteSheetAnimation = AddComponent<SpriteSheetAnimation>();
+                spriteSheetAnimation.spriteSheet = new SpriteSheet("Assets/C3ZwL.png", 64);
+                spriteSheetAnimation.Framerate = 8;
+                Input.map.Add("up", VirtualKey.W);
+                Input.map.Add("down", VirtualKey.S);
+                Input.map.Add("left", VirtualKey.A);
+                Input.map.Add("right", VirtualKey.D);
+            }
+            protected override void Update()
+            {
+                spriteSheetAnimation.Playing = false;
+                if (Input.GetButton("left"))
+                {
+                    transform.position.x -= speed * Time.deltaTime;
+                    spriteSheetAnimation.Animation = 1;
+                    spriteSheetAnimation.Playing = true;
+                }
+                if (Input.GetButton("right"))
+                {
+                    transform.position.x += speed * Time.deltaTime;
+                    spriteSheetAnimation.Animation = 3;
+                    spriteSheetAnimation.Playing = true;
+                }
+                if (Input.GetButton("up"))
+                {
+                    transform.position.y += speed * Time.deltaTime;
+                    if (!spriteSheetAnimation.Playing)
+                    {
+                        spriteSheetAnimation.Animation = 0;
+                        spriteSheetAnimation.Playing = true;
+                    }
+                }
+                if (Input.GetButton("down"))
+                {
+                    transform.position.y -= speed * Time.deltaTime;
+                    if (!spriteSheetAnimation.Playing)
+                    {
+                        spriteSheetAnimation.Animation = 2;
+                        spriteSheetAnimation.Playing = true;
+                    }
+                }
+
+            }
+        }
+        public MainWindow()
+        {
+            this.InitializeComponent();
+            Core.Start(xamlCanvas);
+            Scene scene = new Scene();
+            scene.root.Instantiate().AddComponent<Camera>().SetMain();
+            var player = scene.root.Instantiate();
+            player.AddComponent<PlayerController>();
+            player.transform.position = new Vector2(500, -500);
+            scene.Start();
+        }
+    }
+}
+</textarea></code></pre></div></details></li>
+    </ul>
+    <footer>
+        Page generated by <a
+            href="https://github.com/Animeska34/Lectures/tree/master/HTMLGenerator">HTMLGenerator</a><br>
+        Page updated: <b>03/11/2022 11:53:19</b>
+    </footer>
+</body>
+
+</html>

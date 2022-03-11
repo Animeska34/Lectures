@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+                canvas {
+                    border: 1px solid red;
+                }
+                button {
+                    display: block;
+                }
+        </style>
+        <script>
+            function draw(){
+                var canvas = document.querySelector("canvas");
+                var gl = canvas.getContext("webgl");
+
+                var binds = [
+                    0.0,0.5,
+                    0.5,-0.5,
+                    -0.5,-0.5, 
+
+                    0.0,0.5,
+                    0.5,-0.5,
+                    0.5,0.5
+                ];
+
+                var bindBuffer = gl.createBuffer();
+                gl.bindBuffer(gl.ARRAY_BUFFER, bindBuffer);
+                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(binds), gl.STATIC_DRAW);
+                gl.bindBuffer(gl.ARRAY_BUFFER, null);
+
+
+                var bindCode = "attribute vec2 cords; void main(void) {gl_Position = vec4(cords, 0.0, 1.0);}";
+                var vertShaderObj = gl.createShader(gl.VERTEX_SHADER);
+                gl.shaderSource(vertShaderObj, bindCode);
+                gl.compileShader(vertShaderObj);
+
+                var fragmentCode = "void main(void) { gl_FragColor = vec4(0.0,1.0,0.0,0.5); }";
+                var fragmentShaderObj = gl.createShader(gl.FRAGMENT_SHADER);
+                gl.shaderSource(fragmentShaderObj, fragmentCode);
+                gl.compileShader(fragmentShaderObj);
+
+                var shaderProgram = gl.createProgram();
+                gl.attachShader(shaderProgram,vertShaderObj);
+                gl.attachShader(shaderProgram, fragmentShaderObj);
+                gl.linkProgram(shaderProgram);
+                gl.useProgram(shaderProgram);
+
+                gl.bindBuffer(gl.ARRAY_BUFFER, bindBuffer);
+                var cords = gl.getAttribLocation(shaderProgram, "cords");
+                gl.vertexAttribPointer(cords, 2, gl.FLOAT, false, 0,0);
+                gl.enableVertexAttribArray(cords);
+                gl.clearColor(0.1, 0.1, 0.1, 0.8);
+                gl.enable(gl.DEPTH_TEST);
+                gl.clear(gl.COLOR_BUFFER_BIT);
+                gl.viewport(0,0, canvas.width,canvas.height);
+                gl.drawArrays(gl.TRIANGLES, 0, 6);
+            }
+        </script>
+    </head>
+    <body>
+        <canvas width="600" height="300">
+        </canvas>
+        <button onclick="draw()">Draw</button>
+    </body>
+</html>
