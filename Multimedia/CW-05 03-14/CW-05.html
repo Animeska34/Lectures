@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        class Human {
+            constructor(name, second){
+                this.name = name;
+                this.second = second;
+                
+            }
+        }
+        class Worker extends Human {
+            SetSalary(salary){
+                this.salary = salary;
+            }
+            Bonus(bonus){
+                salary+=bonus;
+            }
+            constructor(name, second, salary){
+                super(name, second);
+                this.salary = salary;
+
+            }
+        }
+    
+        function GetExtension(file){
+            return file.slice(file.lastIndexOf(".") + 1);
+        }
+        function RandomSen(){
+            return Math.floor(Math.random() * 1000);
+        }
+        function RandomRange(from, to){
+            return Math.floor(from + Math.random() * (to - from));
+        }
+    </script>
+</head>
+<body>
+</body>
+</html>

@@ -22,6 +22,7 @@ namespace SkiaGame
             Single speed = 75;
             protected override void Setup()
             {
+                AddComponent<SpriteRenderer>();
                 spriteSheetAnimation = AddComponent<SpriteSheetAnimation>();
                 spriteSheetAnimation.spriteSheet = new SpriteSheet("Assets/C3ZwL.png", 64);
                 spriteSheetAnimation.Framerate = 8;
@@ -65,6 +66,10 @@ namespace SkiaGame
                 }
                 if (!spriteSheetAnimation.Playing)
                     spriteSheetAnimation.SetFrame(0);
+                if (Input.GetKeyDown(VirtualKey.Space))
+                {
+                    Debug.Log("Space pressed");
+                }
             }
         }
         public MainWindow()
@@ -77,6 +82,9 @@ namespace SkiaGame
             player.AddComponent<PlayerController>();
             player.transform.scale = new Vector2(2f, 2f);
             player.transform.position = new Vector2(500, -500);
+            GameObject name = player.Instantiate();
+            name.AddComponent<TextRenderer>().Text = "Player";
+            name.transform.position = new Vector2(15, 0);
             scene.Start();
         }
     }
