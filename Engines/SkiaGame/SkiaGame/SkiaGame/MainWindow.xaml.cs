@@ -66,10 +66,6 @@ namespace SkiaGame
                 }
                 if (!spriteSheetAnimation.Playing)
                     spriteSheetAnimation.SetFrame(0);
-                if (Input.GetKeyDown(VirtualKey.Space))
-                {
-                    Debug.Log("Space pressed");
-                }
             }
         }
         public MainWindow()
