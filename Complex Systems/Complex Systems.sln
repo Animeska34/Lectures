@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "HW-03 tkinter task", "HW-03 tkinter task\HW-03 tkinter task.pyproj", "{4CB0A51A-6760-4E65-B015-93CD4DDB58BA}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "HW-04", "HW-04\HW-04.pyproj", "{5FEA9567-F40B-4A9E-883A-1AF7C1717479}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4CB0A51A-6760-4E65-B015-93CD4DDB58BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CB0A51A-6760-4E65-B015-93CD4DDB58BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FEA9567-F40B-4A9E-883A-1AF7C1717479}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FEA9567-F40B-4A9E-883A-1AF7C1717479}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1676071B-9DF6-490F-9EE3-D0B86CA901EB}
+	EndGlobalSection
+EndGlobal
