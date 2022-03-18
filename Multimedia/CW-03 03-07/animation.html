@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        @keyframes anm1 {
+            from{
+                left: 0%;
+                color: white;
+            }
+            to{
+                color: black;
+                left: 50%;
+            }
+        }
+        @keyframes anm-img {
+            0%{
+                left: -50%;
+            }   
+            50% {
+                left: 0%;
+            }
+            100% {
+                left: 0%;
+            }
+        }
+        @keyframes anm-txt {
+            0%{
+                color: transparent;
+                left: 50%;
+                font-size: 25%;
+            }   
+            50% {
+                left: 0%;
+            }
+            100%{
+                left: 0%;
+                font-size: 50px;
+                color: white;
+            }
+        }
+        header{
+            background-color: blue;
+            color:white;
+        }
+        #container{
+            margin-top: 100px;
+            margin-left: 20%;
+            width: 60%;
+            background-color: black;
+            color: white;
+            overflow: hidden;
+        }
+        #container img {
+            position: relative;
+            width: 50%;
+            left: -50%;
+            vertical-align: middle;
+            animation-name: anm-img;
+            animation-duration: 5s;
+            animation-iteration-count: infinite;
+        }
+        #container span{
+            font-size: 50px;
+            color: white;
+            position: relative;
+            left: 50%;
+            animation-name: anm-txt;
+            animation-duration: 5s;
+            animation-iteration-count: infinite;
+        }
+        .animated{
+            position: relative;
+            height: 600px;
+            width: 800px;
+            display: block;
+            animation-name: anm1;
+            animation-duration: 1s;
+            animation-iteration-count: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Animation</h1>
+    </header>
+    <div id="container">
+        <img src="https://cdn.imgbin.com/1/9/23/imgbin-blue-square-blue-box-geometric-shapes-illustration-A3hmJSLCTRJ1Rx9zVFBi2SadW.jpg"/>
+        <span>12345</span>
+    </div>
+</body>
+
+</html>
