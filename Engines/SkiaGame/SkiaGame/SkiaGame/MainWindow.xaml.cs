@@ -3,7 +3,7 @@ using Windows.System;
 using Microsoft.UI.Xaml;
 
 using SS2DE;
-using SS2DE.Graphics;
+using SS2DE.Assets;
 using SS2DE.Components;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -18,14 +18,13 @@ namespace SkiaGame
     {
         class PlayerController : Component
         {
-            SpriteSheetAnimation spriteSheetAnimation;
+            SpriteSheetAnimation ani;
             Single speed = 75;
             protected override void Setup()
             {
                 AddComponent<SpriteRenderer>();
-                spriteSheetAnimation = AddComponent<SpriteSheetAnimation>();
-                spriteSheetAnimation.spriteSheet = new SpriteSheet("Assets/C3ZwL.png", 64);
-                spriteSheetAnimation.Framerate = 8;
+                ani = Asset.Load<SpriteSheetAnimation>("C3ZwL.png");
+                AddComponent<Animator>().Animation = ani;
                 Input.map.Add("up", VirtualKey.W);
                 Input.map.Add("down", VirtualKey.S);
                 Input.map.Add("left", VirtualKey.A);
@@ -33,39 +32,39 @@ namespace SkiaGame
             }
             protected override void Update()
             {
-                spriteSheetAnimation.Playing = false;
+                ani.Playing = false;
                 if (Input.GetButton("left"))
                 {
                     transform.position.x -= speed * Time.deltaTime;
-                    spriteSheetAnimation.Animation = 1;
-                    spriteSheetAnimation.Playing = true;
+                    ani.SetAnimation(1);
+                    ani.Playing = true;
                 }
                 if (Input.GetButton("right"))
                 {
                     transform.position.x += speed * Time.deltaTime;
-                    spriteSheetAnimation.Animation = 3;
-                    spriteSheetAnimation.Playing = true;
+                    ani.SetAnimation(3);
+                    ani.Playing = true;
                 }
                 if (Input.GetButton("up"))
                 {
                     transform.position.y += speed * Time.deltaTime;
-                    if (!spriteSheetAnimation.Playing)
+                    if (!ani.Playing)
                     {
-                        spriteSheetAnimation.Animation = 0;
-                        spriteSheetAnimation.Playing = true;
+                        ani.SetAnimation(0);
+                        ani.Playing = true;
                     }
                 }
                 if (Input.GetButton("down"))
                 {
                     transform.position.y -= speed * Time.deltaTime;
-                    if (!spriteSheetAnimation.Playing)
+                    if (!ani.Playing)
                     {
-                        spriteSheetAnimation.Animation = 2;
-                        spriteSheetAnimation.Playing = true;
+                        ani.SetAnimation(2);
+                        ani.Playing = true;
                     }
                 }
-                if (!spriteSheetAnimation.Playing)
-                    spriteSheetAnimation.SetFrame(0);
+                if (!ani.Playing)
+                    ani.SetFrame(0);
             }
         }
         public MainWindow()

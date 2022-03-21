@@ -11,6 +11,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Remove="Assets\C3ZwL.png" />
+    <Content Remove="Assets\C3ZwL.png.meta" />
   </ItemGroup>
 
   <ItemGroup>
