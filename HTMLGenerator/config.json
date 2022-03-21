@@ -9,6 +9,7 @@
     "rawDataTemplates":{
         ".cs":"<li><details><summary>%name%</summary><div class=\"code\"><pre><code class=\"language-csharp\"><textarea>%content%</textarea></code></pre></div></details></li>",
         ".xaml":"<li><details><summary>%name%</summary><div class=\"code\"><pre><code class=\"language-xml\"><textarea>%content%</textarea></code></pre></div></details></li>",
+        ".meta":"<li><details><summary>%name%</summary><pre><div class=\"code\"><code class=\"language-js\"><textarea>%content%</textarea></code></div></pre></details></li>",
         ".js":"<li><details><summary>%name%</summary><pre><div class=\"code\"><code class=\"language-js\"><textarea>%content%</textarea></code></div></pre></details></li>",
         ".css":"<li><details><summary>%name%</summary><pre><div class=\"code\"><code class=\"language-css\"><textarea>%content%</textarea></code></div></pre></details></li>",
         ".html":"<li><details><summary>%name%</summary><a href=\"%link%\">View page</a><pre><div class=\"code\"><code class=\"language-xml\"><textarea>%content%</textarea></code></div></pre></details></li>",
