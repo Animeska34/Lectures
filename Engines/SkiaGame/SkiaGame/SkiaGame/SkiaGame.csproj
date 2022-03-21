@@ -27,4 +27,10 @@
       <HintPath>..\..\..\..\..\SS2DE\SS2DE\bin\Release\net5.0-windows10.0.19041.0\SS2DE.dll</HintPath>
     </Reference>
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Assets\C3ZwL.png.meta">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
