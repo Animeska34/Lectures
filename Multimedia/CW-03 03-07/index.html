@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CW-03 03-07</title>
+    <link rel="stylesheet" href="../../css/dark.css">
+    <link rel="stylesheet" href="../../css/monokai-sublime.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/highlight.min.js"></script>
+</head>
+
+<body onload="hljs.highlightAll();">
+    <iframe src="../../items/navbar.html" seamless></iframe>
+    <h1>CW-03 03-07</h1>
+    <ul style="text-align: left;">
+        <li><details><summary>animation.html</summary><a href="animation.html">View page</a><pre><div class="code"><code class="language-xml"><textarea><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        @keyframes anm1 {
+            from{
+                left: 0%;
+                color: white;
+            }
+            to{
+                color: black;
+                left: 50%;
+            }
+        }
+        @keyframes anm-img {
+            0%{
+                left: -50%;
+            }   
+            50% {
+                left: 0%;
+            }
+            100% {
+                left: 0%;
+            }
+        }
+        @keyframes anm-txt {
+            0%{
+                color: transparent;
+                left: 50%;
+                font-size: 25%;
+            }   
+            50% {
+                left: 0%;
+            }
+            100%{
+                left: 0%;
+                font-size: 50px;
+                color: white;
+            }
+        }
+        header{
+            background-color: blue;
+            color:white;
+        }
+        #container{
+            margin-top: 100px;
+            margin-left: 20%;
+            width: 60%;
+            background-color: black;
+            color: white;
+            overflow: hidden;
+        }
+        #container img {
+            position: relative;
+            width: 50%;
+            left: -50%;
+            vertical-align: middle;
+            animation-name: anm-img;
+            animation-duration: 5s;
+            animation-iteration-count: infinite;
+        }
+        #container span{
+            font-size: 50px;
+            color: white;
+            position: relative;
+            left: 50%;
+            animation-name: anm-txt;
+            animation-duration: 5s;
+            animation-iteration-count: infinite;
+        }
+        .animated{
+            position: relative;
+            height: 600px;
+            width: 800px;
+            display: block;
+            animation-name: anm1;
+            animation-duration: 1s;
+            animation-iteration-count: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Animation</h1>
+    </header>
+    <div id="container">
+        <img src="https://cdn.imgbin.com/1/9/23/imgbin-blue-square-blue-box-geometric-shapes-illustration-A3hmJSLCTRJ1Rx9zVFBi2SadW.jpg"/>
+        <span>12345</span>
+    </div>
+</body>
+
+</html></textarea></code></div></pre></details></li><li><details><summary>CW-03.html</summary><a href="CW-03.html">View page</a><pre><div class="code"><code class="language-xml"><textarea><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+    <header class="jumbotron text-center bg-dark"><h1 class="text-light">Header</h1></header>
+    <div class="container">
+        <div class="row">
+        <div class="col-sm-4">Left</div>
+        <div class="col-sm-8 row">
+            <article class="col-sm-4">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis vitae libero dapibus, pharetra mauris id, scelerisque massa. Aenean ut fringilla ante. Donec condimentum auctor magna, sed consectetur elit gravida at. Donec eget ligula vel neque hendrerit pharetra vel eget lectus. Nulla commodo venenatis laoreet. Maecenas ac mauris faucibus, interdum quam in, varius mi. Sed eget porta odio. Praesent vestibulum, massa eget porttitor euismod, lorem est semper sapien, a fringilla ligula quam quis arcu. Nam vitae neque et dui blandit aliquam. Quisque fringilla turpis a erat convallis gravida. Sed volutpat ipsum vestibulum ante vestibulum vulputate.
+            </article>
+            <article  class="col-sm-4">
+                Nam auctor ac lacus id varius. Vivamus mollis pretium convallis. Donec neque diam, convallis at placerat aliquet, porttitor at ex. Duis vehicula a nibh faucibus vehicula. Fusce quis sodales nisl. Praesent efficitur diam quis porttitor commodo. Mauris lectus nisl, facilisis vel mi at, pretium auctor nisl. Etiam commodo lorem tortor, quis rhoncus mauris tempor et. Praesent accumsan ultrices leo, sed tristique ex blandit nec. Etiam metus massa, dignissim non nulla eu, commodo tempus nisl. Sed ultricies fermentum tellus, eget iaculis tortor luctus quis. Duis efficitur velit nec mi pretium, vel commodo velit euismod. Proin consequat ultricies lectus, sit amet auctor urna sodales a. Suspendisse consectetur ac nisi ac venenatis. Aliquam viverra mattis quam id tempus.
+            </article>
+            <article  class="col-sm-4">
+                Ut purus libero, cursus at lorem in, luctus faucibus diam. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nullam nec malesuada diam. Duis sit amet pretium turpis. Vivamus enim magna, hendrerit eget quam quis, porttitor lacinia ipsum. In sit amet tristique tellus, quis iaculis nunc. Sed luctus interdum sollicitudin. Integer pellentesque velit a lectus condimentum cursus. Phasellus pharetra lectus pulvinar tellus ultrices, ac porttitor diam tempus. Donec eu venenatis diam, a tristique diam. Aliquam consequat hendrerit ex, vitae mollis libero rhoncus tempus.
+            </article>
+        </div>
+    </div>
+    </div>
+        <footer class="jumbotron">footer</footer>
+</body>
+
+</html></textarea></code></div></pre></details></li>
+    </ul>
+    <footer>
+        Page generated by <a
+            href="https://github.com/Animeska34/Lectures/tree/master/HTMLGenerator">HTMLGenerator</a><br>
+        Page updated: <b>03/21/2022 23:31:11</b>
+    </footer>
+</body>
+
+</html>
