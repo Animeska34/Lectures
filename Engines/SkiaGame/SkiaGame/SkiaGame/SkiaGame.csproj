@@ -12,6 +12,9 @@
   <ItemGroup>
     <Content Remove="Assets\C3ZwL.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="Assets\C3ZwL.png.meta" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.ProjectReunion" Version="0.8.6" />
@@ -25,5 +28,11 @@
     <Reference Include="SS2DE">
       <HintPath>..\..\..\..\..\SS2DE\SS2DE\bin\Release\net5.0-windows10.0.19041.0\SS2DE.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Assets\C3ZwL.png.meta">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

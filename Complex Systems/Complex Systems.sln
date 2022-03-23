@@ -7,6 +7,8 @@ Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "HW-03 tkinter task", "HW-03
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "HW-04", "HW-04\HW-04.pyproj", "{5FEA9567-F40B-4A9E-883A-1AF7C1717479}"
 EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "HW-05", "HW-05\HW-05.pyproj", "{125E91D5-D4FF-42A8-AD0A-3D135373E052}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +19,8 @@ Global
 		{4CB0A51A-6760-4E65-B015-93CD4DDB58BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5FEA9567-F40B-4A9E-883A-1AF7C1717479}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5FEA9567-F40B-4A9E-883A-1AF7C1717479}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{125E91D5-D4FF-42A8-AD0A-3D135373E052}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{125E91D5-D4FF-42A8-AD0A-3D135373E052}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
