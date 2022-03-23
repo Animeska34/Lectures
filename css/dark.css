@@ -96,6 +96,10 @@ a.button:hover{
     background: #23241f;
     font-size: 14px;
     font-family: "Cascadia Mono", "Roboto", "Arial";
+    padding: 8px;
+    white-space: pre;
+    counter-reset: line;
+    border-radius: 10px;
 }
 
 table {
