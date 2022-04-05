@@ -30,6 +30,7 @@ namespace NekoApp2D1
 
             InstantiateCyclePlatform(new Vector3(0, -3, 1));
             InstantiatePlatform(new Vector3(5, -4, 1));
+            InstantiatePlatform(new Vector3(10, -3, 1));
             scene.Start();
 
         }

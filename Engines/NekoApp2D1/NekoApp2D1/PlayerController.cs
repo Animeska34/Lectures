@@ -42,6 +42,7 @@ namespace NekoApp2D1
                 ani.SetAnimation(3);
                 ani.playing = true;
             }
+
             if (Input.GetButtonDown("up") && onGround)
             {
                 jumping = true;
@@ -50,9 +51,21 @@ namespace NekoApp2D1
             {
                 jumping = false;
             }
+            /*
+            if (Input.GetKeyDown(VirtualKey.Space))
+            {
+                var tmp = transform.parent.gameObject.Instantiate(transform.position);
+                tmp.AddComponent<BulletController>().left = ani.animation == 1;
+            }
+            */
             if (jumping)
             {
                 transform.position += new Vector3(0, speed * 3 * Time.deltaTime, 0);
+            }
+
+            if (!onGround)
+            {
+                ani.playing = false;
             }
 
             if (transform.position.Y < -10)
