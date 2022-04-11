@@ -14,12 +14,209 @@
     <iframe src="../../items/navbar.html" seamless></iframe>
     <h1>NekoApp2D1</h1>
     <ul style="text-align: left;">
-        
+        <li><details><summary>BulletController.cs</summary><div class="code"><pre><code class="language-csharp"><textarea>using NekoEngine;
+using NekoEngine.Assets;
+using NekoEngine.Components;
+using NekoEngine.Render.OpenGL;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace NekoApp2D1
+{
+    class BulletController : Component
+    {
+        static Sprite sprite;
+
+        float speed = 5f;
+        public bool left;
+        public float lifetime = 1f;
+        protected override void Setup()
+        {
+            AddComponent<SpriteRenderer>().sprite = new Sprite(new Texture2D("bullet.png", Texture2D.MagFilter.Nearest));
+            AddComponent<BoxCollder2D>().isTrigger = true;
+            AddComponent<Rigidbody2D>().useGravity = false;
+            transform.position += new Vector3(0,0,2);
+        }
+        protected override void Update()
+        {
+            lifetime -= Time.deltaTime;
+            if (lifetime < 0)
+            {
+                Destroy();
+            }
+            if (left)
+            {
+                transform.position -= new Vector3(speed * Time.deltaTime, 0, 0);
+                transform.localScale = new Vector3(-1.5f, 1.5f, 1.5f);
+            }
+            else
+            {
+                transform.position += new Vector3(speed * Time.deltaTime, 0, 0);
+                transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+            }
+        }
+
+        protected override void OnDestroy()
+        {
+
+        }
+    }
+}
+</textarea></code></pre></div></details></li><li><details><summary>PlayerController.cs</summary><div class="code"><pre><code class="language-csharp"><textarea>using NekoEngine;
+using NekoEngine.Assets;
+using NekoEngine.Components;
+using NekoEngine.Physics;
+using NekoEngine.Render.OpenGL;
+using System.Numerics;
+
+namespace NekoApp2D1
+{
+    public class PlayerController : Component
+    {
+        SpriteSheetAnimation ani;
+        Single speed = 2f;
+        bool onGround;
+        bool jumping;
+        protected override void Setup()
+        {
+            AddComponent<SpriteRenderer>();
+            ani = new SpriteSheetAnimation(new Texture2D("C3ZwL.png", Texture2D.MagFilter.Nearest));
+            ani.framerate = 8;
+            AddComponent<Animator>().animation = ani;
+            AddComponent<BoxCollder2D>().size = new Vector2(0.1f, 2f);
+            AddComponent<Rigidbody2D>();
+            Camera.Main.transform.SetParent(transform);
+
+            Input.map.Add("up", VirtualKey.W);
+            Input.map.Add("left", VirtualKey.A);
+            Input.map.Add("right", VirtualKey.D);
+        }
+        protected override void Update()
+        {
+            ani.playing = false;
+            if (Input.GetButton("left"))
+            {
+                transform.position -= new Vector3(speed * Time.deltaTime, 0, 0);
+                ani.SetAnimation(1);
+                ani.playing = true;
+            }
+            if (Input.GetButton("right"))
+            {
+                transform.position += new Vector3(speed * Time.deltaTime, 0, 0);
+                ani.SetAnimation(3);
+                ani.playing = true;
+            }
+
+            if (Input.GetButtonDown("up") && onGround)
+            {
+                jumping = true;
+            }
+            if (Input.GetButtonUp("up"))
+            {
+                jumping = false;
+            }
+            /*
+            if (Input.GetKeyDown(VirtualKey.Space))
+            {
+                var tmp = transform.parent.gameObject.Instantiate(transform.position);
+                tmp.AddComponent<BulletController>().left = ani.animation == 1;
+            }
+            */
+            if (jumping)
+            {
+                transform.position += new Vector3(0, speed * 3 * Time.deltaTime, 0);
+            }
+
+            if (!onGround)
+            {
+                ani.playing = false;
+            }
+
+            if (transform.position.Y < -10)
+                transform.position = Vector3.Zero;
+
+            if (!ani.playing)
+                ani.SetFrame(0);
+            else if (ani.frame == 0)
+                ani.SetFrame(1);
+        }
+
+        protected override void OnCollisionEnter2D(Collision2D collision)
+        {
+            if(collision.tag == "ground")
+                onGround = true;
+        }
+        protected override void OnCollisionExit2D(Collision2D collision)
+        {
+            if (collision.tag == "ground")
+                onGround = false;
+        }
+    }
+}
+</textarea></code></pre></div></details></li><li><details><summary>Program.cs</summary><div class="code"><pre><code class="language-csharp"><textarea>using NekoEngine;
+using NekoEngine.Assets;
+using NekoEngine.Components;
+using NekoEngine.Extensions;
+using System.Numerics;
+
+namespace NekoApp2D1
+{
+    public class Program : NekoProgram
+    {
+        private static void Main()
+        {
+            //Starting NekoEngine
+            new Program();
+        }
+        Scene scene;
+        public override void OnLoad()
+        {
+            //Change window title
+            Neko.title = AppDomain.CurrentDomain.FriendlyName;
+            //Creating scene and attaching camera
+            scene = new Scene();
+            var c = scene.root.Instantiate(new Vector3(0, 0, -10)).AddComponent<Camera>();
+            c.SetMain();
+            c.orthographic = true;
+            //Write your logic here
+            var player = scene.root.Instantiate();
+            player.AddComponent<PlayerController>();
+            player.transform.localScale = new Vector3(2f, 2f, 0);
+
+            InstantiateCyclePlatform(new Vector3(0, -3, 1));
+            InstantiatePlatform(new Vector3(5, -4, 1));
+            InstantiatePlatform(new Vector3(10, -3, 1));
+            scene.Start();
+
+        }
+
+        void InstantiatePlatform(Vector3 pos)
+        {
+            var tmp = scene.root.Instantiate();
+            tmp.transform.position = pos;
+            tmp.AddComponent<SpriteRenderer>().sprite = new Sprite("Platform.png");
+            tmp.AddComponent<BoxCollder2D>();
+            tmp.tag = "ground";
+        }
+        void InstantiateCyclePlatform(Vector3 pos)
+        {
+            var tmp = scene.root.Instantiate();
+            tmp.transform.position = pos;
+            tmp.AddComponent<SpriteRenderer>().sprite = new Sprite("CyclePlatform.png");
+            tmp.AddComponent<CycleCollder2D>().radius = 1.1f;
+            tmp.tag = "ground";
+        }
+    }
+}</textarea></code></pre></div></details></li>
     </ul>
     <footer>
         Page generated by <a
             href="https://github.com/Animeska34/Lectures/tree/master/HTMLGenerator">HTMLGenerator</a><br>
-        Page updated: <b>04/05/2022 13:44:44</b>
+        Page updated: <b>04/11/2022 10:33:00</b>
     </footer>
 </body>
 

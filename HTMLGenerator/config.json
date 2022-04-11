@@ -15,7 +15,9 @@
         ".html":"<li><details><summary>%name%</summary><a href=\"%link%\">View page</a><pre><div class=\"code\"><code class=\"language-xml\"><textarea>%content%</textarea></code></div></pre></details></li>",
         ".py":"<li><details><summary>%name%</summary><div class=\"code\"><pre><code class=\"language-python\"><textarea>%content%</textarea></code></pre></div></details></li>",
         ".png":"<li><details><summary>%name%</summary><img height = \"200\" title=\"%name%\" src=\"%rawLink%\"></img></details></li>",
-        ".jpg":"<li><details><summary>%name%</summary><img height = \"200\" title=\"%name%\" src=\"%rawLink%\"></img></details></li>"
+        ".jpg":"<li><details><summary>%name%</summary><img height = \"200\" title=\"%name%\" src=\"%rawLink%\"></img></details></li>",
+        ".jfif":"<li><details><summary>%name%</summary><img height = \"200\" title=\"%name%\" src=\"%rawLink%\"></img></details></li>"
+
     },
     "ignoreFolders":[
         "items",
