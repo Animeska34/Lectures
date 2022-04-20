@@ -12,7 +12,8 @@
         ".meta":"<li><details><summary>%name%</summary><pre><div class=\"code\"><code class=\"language-js\"><textarea>%content%</textarea></code></div></pre></details></li>",
         ".js":"<li><details><summary>%name%</summary><pre><div class=\"code\"><code class=\"language-js\"><textarea>%content%</textarea></code></div></pre></details></li>",
         ".css":"<li><details><summary>%name%</summary><pre><div class=\"code\"><code class=\"language-css\"><textarea>%content%</textarea></code></div></pre></details></li>",
-        ".html":"<li><details><summary>%name%</summary><a href=\"%link%\">View page</a><pre><div class=\"code\"><code class=\"language-xml\"><textarea>%content%</textarea></code></div></pre></details></li>",
+        ".html":"<li><details><summary>%name% <a href=\"%link%\">View</a></summary><pre><div class=\"code\"><code class=\"language-xml\"><textarea>%content%</textarea></code></div></pre></details></li>",
+        ".json":"<li><details><summary>%name%</summary><div class=\"code\"><pre><code><textarea>%content%</textarea></code></pre></div></details></li>",
         ".py":"<li><details><summary>%name%</summary><div class=\"code\"><pre><code class=\"language-python\"><textarea>%content%</textarea></code></pre></div></details></li>",
         ".png":"<li><details><summary>%name%</summary><img height = \"200\" title=\"%name%\" src=\"%rawLink%\"></img></details></li>",
         ".jpg":"<li><details><summary>%name%</summary><img height = \"200\" title=\"%name%\" src=\"%rawLink%\"></img></details></li>",
@@ -33,7 +34,8 @@
         ".csproj",
         ".pyproj",
         ".manifest",
-        ".user"
+        ".user",
+        ".config"
     ],
     "output":true
 }
