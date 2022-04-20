@@ -31,6 +31,7 @@ namespace NekoApp2D1
             InstantiateCyclePlatform(new Vector3(0, -3, 1));
             InstantiatePlatform(new Vector3(5, -4, 1));
             InstantiatePlatform(new Vector3(10, -3, 1));
+            InstantiateFinishPlatform(new Vector3(15, -5, 1));
             scene.Start();
 
         }
@@ -51,5 +52,16 @@ namespace NekoApp2D1
             tmp.AddComponent<CycleCollder2D>().radius = 1.1f;
             tmp.tag = "ground";
         }
+
+        void InstantiateFinishPlatform(Vector3 pos)
+        {
+            var tmp = scene.root.Instantiate();
+            tmp.transform.position = pos;
+            tmp.AddComponent<SpriteRenderer>().sprite = new Sprite("Platform.png");
+            tmp.AddComponent<BoxCollder2D>();
+            tmp.AddComponent<Finish>();
+            tmp.tag = "ground";
+        }
+
     }
 }

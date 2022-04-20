@@ -1,0 +1,332 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>HW-01V1</title>
+
+    <script type='text/javascript' src='js/gl-matrix-min.js'></script>
+    <script type='text/javascript' src='js/utils.js'></script>
+
+    <script id="vertex-shader" type="x-shader/x-vertex">
+        attribute vec4 aVertexPosition;
+
+        attribute vec2 aTextureCoord;
+
+        uniform mat4 uModelViewMatrix;
+        uniform mat4 uProjectionMatrix;
+
+        varying highp vec2 vTextureCoord;
+
+        void main(void) {
+          gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
+          vTextureCoord = aTextureCoord;
+        }
+    </script>
+
+    <script id="fragment-shader" type="x-shader/x-fragment">
+        varying highp vec2 vTextureCoord;
+
+        uniform sampler2D uSampler;
+
+        void main(void) {
+          gl_FragColor = texture2D(uSampler, vTextureCoord);
+        }
+    </script>
+
+    <script>
+        var canvas = null;
+        var gl = null;
+        var program = null;
+        var modelMatrix = mat4.create();
+        var projectionMatrix = mat4.create();
+        var moveMatrix = mat4.create();
+        const rad2deg = 0.01745;
+        var then = 0;
+        var deltaTime = 0;
+
+        function isPowerOf2(value) {
+            return (value & (value - 1)) == 0;
+        }
+
+        class Vector3 {
+            constructor(x = 0, y = 0, z = 0) {
+                this.x = x;
+                this.y = y;
+                this.z = z;
+            }
+        }
+        class Color {
+            constructor(r = 255, g = 125, b = 0, a = 255) {
+                this.r = r;
+                this.g = g;
+                this.b = b;
+                this.a = a;
+            }
+        }
+        class Model {
+            /**
+             * Render model (Call into OGL Render())
+             */
+            Render() {
+                if (this.loaded) {
+                    let matrix = mat4.create();
+                    mat4.identity(matrix);
+                    mat4.translate(matrix, [this.position.x, this.position.y, this.position.z]);
+                    mat4.rotateX(matrix, this.rotation.x * rad2deg);
+                    mat4.rotateY(matrix, this.rotation.y * rad2deg);
+                    mat4.rotateZ(matrix, this.rotation.z * rad2deg);
+                    mat4.scale(matrix, [this.scale.x, this.scale.y, this.scale.z]);
+
+                    //gl.uniform4f(program.modelColor, 1, 0.5, 0, 255);
+
+                    gl.bindBuffer(gl.ARRAY_BUFFER, this.vertex);
+                    gl.vertexAttribPointer(program.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+                    gl.enableVertexAttribArray(program.vertexPositionAttribute);
+
+                    gl.bindBuffer(gl.ARRAY_BUFFER, this.UV);
+                    gl.vertexAttribPointer(program.UV, 2, gl.FLOAT, false, 0, 0);
+                    gl.enableVertexAttribArray(program.UV);
+
+                    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.index);
+
+                    gl.uniformMatrix4fv(program.mvMatrixUniform, false, matrix);
+
+                    gl.activeTexture(gl.TEXTURE0);
+                    gl.bindTexture(gl.TEXTURE_2D, this.texture);
+                    gl.uniform1i(program.uSampler, 0);
+
+                    gl.drawElements(gl.TRIANGLES, this.indexLength, gl.UNSIGNED_SHORT, 0);
+                }
+            }
+            /**
+            * Set vertices and indices
+            */
+            Set(vertex, index, UV = null, texture = null) {
+                gl.bindBuffer(gl.ARRAY_BUFFER, this.vertex)
+                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertex), gl.STATIC_DRAW);
+                this.vertexLength = vertex.length;
+
+                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.index);
+                gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(index), gl.STATIC_DRAW);
+                this.indexLength = index.length;
+
+                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+                gl.bindBuffer(gl.ARRAY_BUFFER, null);
+
+                if (UV != null) {
+                    gl.bindBuffer(gl.ARRAY_BUFFER, this.UV);
+                    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(UV), gl.STATIC_DRAW);
+                    gl.bindBuffer(gl.ARRAY_BUFFER, null);
+
+                    if (texture != null) {
+                        this.LoadTexture(texture);
+                    }
+                }
+                this.loaded = true;
+            }
+
+            LoadTexture(path) {
+                var img = new Image();
+                img.src = path;
+                var model = this;
+                img.onload = function () {
+                    gl.bindTexture(gl.TEXTURE_2D, model.texture);
+                    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this);
+
+                    if (isPowerOf2(this.width) && isPowerOf2(this.height)) {
+                        gl.generateMipmap(gl.TEXTURE_2D);
+                    } else {
+                        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+                        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+                        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+                    }
+                };
+            }
+
+            SetColor(color) {
+                gl.bindTexture(gl.TEXTURE_2D, this.texture);
+                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([color.r, color.g, color.b, color.a]));
+            }
+
+            /**
+             * Load JSON model from file (three.js format)
+             */
+            Load(modelPath, texturePath = null) {
+                var request = new XMLHttpRequest();
+                var model = this;
+                request.onload = function () {
+                    //Load Json from file
+                    var json = JSON.parse(request.responseText);
+                    //Set model from Json
+                    model.Set(json.data.attributes.position.array, json.data.index.array, json.data.attributes.uv.array, texturePath);
+                }
+                request.open("GET", modelPath);
+                request.send();
+            }
+
+            constructor(baseColor = null) {
+                this.UV = gl.createBuffer();
+                /**
+                * Get model vertices buffer
+                * */
+                this.vertex = gl.createBuffer();
+                /**
+                * Get model vertices length
+                * */
+                this.vertexLength = 0;
+                /**
+                * Get model indices buffer
+                * */
+                this.index = gl.createBuffer();
+                /**
+                 * Get model indices count
+                 * */
+                this.indexLength = 0;
+                /**
+                 * Set model position
+                 * */
+                this.position = new Vector3();
+                /**
+                * Set model rotation (euler)
+                */
+                this.rotation = new Vector3();
+                /**
+                 * Set model scale
+                 */
+                this.scale = new Vector3();
+                this.scale.x = 1;
+                this.scale.y = 1;
+                this.scale.z = 1;
+
+                this.texture = gl.createTexture();
+
+                if (baseColor == null)
+                    baseColor = new Color();
+                this.SetColor(baseColor);
+
+                this.loaded = false;
+            }
+        }
+
+        var models = [];
+        var hikouki;
+        var building;
+
+        var speed = 10;
+
+        function Resize() {
+            if (canvas != null) {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+        }
+
+        function Start() {
+            switch (window.location.protocol) {
+                case 'file:':
+                    document.clear();
+                    document.writeln("Error: This program cannot run from local file.");
+                    return;
+                default: break;
+            }
+
+            //Load canvas
+            canvas = document.getElementById("canvas");
+            gl = utils.getGLContext('canvas');
+            Resize();
+            //load shaders
+            var vertexShader = utils.getShader(gl, 'vertex-shader');
+            var fragmentShader = utils.getShader(gl, 'fragment-shader');
+
+            window.addEventListener("keydown", Input, false);
+
+            //create and use shader program
+            program = gl.createProgram();
+            gl.attachShader(program, vertexShader);
+            gl.attachShader(program, fragmentShader);
+            gl.linkProgram(program);
+            gl.useProgram(program);
+
+            //assign shader vars
+            program.vertexPositionAttribute = gl.getAttribLocation(program, "aVertexPosition");
+            program.pMatrixUniform = gl.getUniformLocation(program, 'uProjectionMatrix');
+            program.mvMatrixUniform = gl.getUniformLocation(program, 'uModelViewMatrix');
+            program.UV = gl.getAttribLocation(program, "aTextureCoord");
+            program.uSampler = gl.getUniformLocation(program, "u_sampler");
+
+            //Load models
+            hikouki = new Model();
+            building = new Model();
+
+            hikouki.Load("model.json");
+            hikouki.LoadTexture("model.png");
+
+            hikouki.position.z = -40;
+            hikouki.rotation.y = -90;
+            hikouki.rotation.x = 25;
+
+            var vertex = [1.3666739463806152, -0.5631645917892456, -1.3666739463806152, 1.3666739463806152, -0.5631645917892456, -1.3666739463806152, 1.3666739463806152, -0.5631645917892456, -1.3666739463806152, 1.3666739463806152, -1, -1.3666739463806152, 1.3666739463806152, -1, -1.3666739463806152, 1.3666739463806152, -1, -1.3666739463806152, 1.3666739463806152, -0.5631645917892456, 1.3666739463806152, 1.3666739463806152, -0.5631645917892456, 1.3666739463806152, 1.3666739463806152, -0.5631645917892456, 1.3666739463806152, 1.3666739463806152, -1, 1.3666739463806152, 1.3666739463806152, -1, 1.3666739463806152, 1.3666739463806152, -1, 1.3666739463806152, -1.3666739463806152, -0.5631645917892456, -1.3666739463806152, -1.3666739463806152, -0.5631645917892456, -1.3666739463806152, -1.3666739463806152, -0.5631645917892456, -1.3666739463806152, -1.3666739463806152, -1, -1.3666739463806152, -1.3666739463806152, -1, -1.3666739463806152, -1.3666739463806152, -1, -1.3666739463806152, -1.3666739463806152, -0.5631645917892456, 1.3666739463806152, -1.3666739463806152, -0.5631645917892456, 1.3666739463806152, -1.3666739463806152, -0.5631645917892456, 1.3666739463806152, -1.3666739463806152, -1, 1.3666739463806152, -1.3666739463806152, -1, 1.3666739463806152, -1.3666739463806152, -1, 1.3666739463806152, 0.005325973033905029, -0.5599606037139893, -0.006116620264947414, 0.005325973033905029, -0.5599606037139893, -0.006116620264947414, 0.005325973033905029, -0.5599606037139893, -0.006116620264947414, 0.005325973033905029, 1.250037670135498, -0.006116620264947414, 0.005325973033905029, 1.250037670135498, -0.006116620264947414, 0.005325973033905029, 1.250037670135498, -0.006116620264947414, 0.005325973033905029, -0.5599606037139893, -0.904072105884552, 0.005325973033905029, -0.5599606037139893, -0.904072105884552, 0.005325973033905029, -0.5599606037139893, -0.904072105884552, 0.005325973033905029, 1.250037670135498, -0.904072105884552, 0.005325973033905029, 1.250037670135498, -0.904072105884552, 0.005325973033905029, 1.250037670135498, -0.904072105884552, 0.8102417588233948, -0.5599606037139893, -0.006116620264947414, 0.8102417588233948, -0.5599606037139893, -0.006116620264947414, 0.8102417588233948, -0.5599606037139893, -0.006116620264947414, 0.8102417588233948, 1.2518870830535889, -0.017122864723205566, 0.8102417588233948, 1.2518870830535889, -0.017122864723205566, 0.8102417588233948, 1.2518870830535889, -0.017122864723205566, 0.8102417588233948, -0.5599606037139893, -0.904072105884552, 0.8102417588233948, -0.5599606037139893, -0.904072105884552, 0.8102417588233948, -0.5599606037139893, -0.904072105884552, 0.8102417588233948, 1.2518870830535889, -0.915078341960907, 0.8102417588233948, 1.2518870830535889, -0.915078341960907, 0.8102417588233948, 1.2518870830535889, -0.915078341960907, -1.1318423748016357, -0.5602155327796936, 0.32582512497901917, -1.1318423748016357, -0.5602155327796936, 0.32582512497901917, -1.1318423748016357, -0.5602155327796936, 0.32582512497901917, -1.1318423748016357, 0.09143485128879547, 0.32582512497901917, -1.1318423748016357, 0.09143485128879547, 0.32582512497901917, -1.1318423748016357, 0.09143485128879547, 0.32582512497901917, -1.1318423748016357, -0.5602155327796936, -0.32582512497901917, -1.1318423748016357, -0.5602155327796936, -0.32582512497901917, -1.1318423748016357, -0.5602155327796936, -0.32582512497901917, -1.1318423748016357, 0.09143485128879547, -0.32582512497901917, -1.1318423748016357, 0.09143485128879547, -0.32582512497901917, -1.1318423748016357, 0.09143485128879547, -0.32582512497901917, -0.48019203543663025, -0.5602155327796936, 0.32582512497901917, -0.48019203543663025, -0.5602155327796936, 0.32582512497901917, -0.48019203543663025, -0.5602155327796936, 0.32582512497901917, -0.48019203543663025, 0.09143485128879547, 0.32582512497901917, -0.48019203543663025, 0.09143485128879547, 0.32582512497901917, -0.48019203543663025, 0.09143485128879547, 0.32582512497901917, -0.48019203543663025, -0.5602155327796936, -0.32582512497901917, -0.48019203543663025, -0.5602155327796936, -0.32582512497901917, -0.48019203543663025, -0.5602155327796936, -0.32582512497901917, -0.48019203543663025, 0.09143485128879547, -0.32582512497901917, -0.48019203543663025, 0.09143485128879547, -0.32582512497901917, -0.48019203543663025, 0.09143485128879547, -0.32582512497901917];
+
+            var index = [1, 14, 20, 1, 20, 7, 10, 6, 19, 10, 19, 23, 21, 18, 12, 21, 12, 15, 16, 3, 9, 16, 9, 22, 5, 2, 8, 5, 8, 11, 17, 13, 0, 17, 0, 4, 24, 27, 33, 24, 33, 30, 31, 34, 45, 31, 45, 42, 44, 47, 41, 44, 41, 38, 37, 40, 29, 37, 29, 26, 32, 43, 36, 32, 36, 25, 46, 35, 28, 46, 28, 39, 48, 51, 57, 48, 57, 54, 56, 58, 69, 56, 69, 67, 68, 71, 65, 68, 65, 62, 61, 63, 52, 61, 52, 50, 55, 66, 60, 55, 60, 49, 70, 59, 53, 70, 53, 64];
+            var uv = [0.9226465821266174, 0.03253161907196045, 0.06908170878887177, 0.2353116273880005, 0.9226465821266174, 0.23396801948547363, 0.932398796081543, 0.23649156093597412, 0.12430429458618164, 0.03253161907196045, 0.12430429458618164, 0.23396801948547363, 0.9226465821266174, 0.23432469367980957, 0.06908170878887177, 0.01466226577758789, 0.9226465821266174, 0.03133809566497803, 0.932398796081543, 0.015842199325561523, 0.12430429458618164, 0.23432469367980957, 0.12430429458618164, 0.03133809566497803, 0.9249246120452881, 0.03217494487762451, 0.9226465821266174, 0.23516154289245605, 0.9342529773712158, 0.2353116273880005, 0.09850180149078369, 0.03217494487762451, 0.06722752749919891, 0.23649156093597412, 0.12430429458618164, 0.23516154289245605, 0.9249246120452881, 0.23480486869812012, 0.9226465821266174, 0.031694769859313965, 0.9342529773712158, 0.01466226577758789, 0.09850180149078369, 0.23480486869812012, 0.06722752749919891, 0.015842199325561523, 0.12430429458618164, 0.031694769859313965, 1.0007209777832031, 0.9975149631500244, 0.09015581756830215, 0.02294015884399414, 0.008364856243133545, 1.0004148483276367, 0.9993944764137268, 0.44779282808303833, -0.0024497509002685547, 0.25566422939300537, 0.0070383548736572266, 0.4506927728652954, 0.00970304012298584, 1.0011985301971436, 1.001350998878479, 0.9975125789642334, 0.09015581756830215, 0.2332068681716919, 0.008376479148864746, 0.4514763355255127, 1.0000245571136475, 0.4477904438972473, -0.011912226676940918, 0.0004527568817138672, 0.9219697117805481, 0.02294015884399414, 0.9993827939033508, 0.9967314600944519, 0.009591877460479736, 1.0003430843353271, 1.0029429197311401, 0.2533344030380249, 0.9980563521385193, 0.4470093250274658, 0.008265376091003418, 0.4506208896636963, 0.010333120822906494, 1.0011961460113525, 0.9219697117805481, 0.2332068681716919, 1.0006098747253418, 0.9966595768928528, 0.0090065598487854, 0.4514739513397217, 0.9934804439544678, -0.0018770694732666016, 0.9992834329605103, 0.4469373822212219, 0.9993288516998291, 0.9964605569839478, 0.09015581756830215, 0.02294015884399414, 0.0005030035972595215, 0.99835604429245, 1.0078647136688232, 0.7672151923179626, 0.009038744494318962, 0.7691106796264648, -0.0024497509002685547, 0.25566422939300537, -0.0006708502769470215, 0.9962781667709351, 0.09015581756830215, 0.2332068681716919, 0.9990330934524536, 0.9986556768417358, 0.007864890620112419, 0.76703280210495, 1.0075688362121582, 0.7694103121757507, -0.011912226676940918, 0.0004527568817138672, 0.9219697117805481, 0.02294015884399414, 1.0005028247833252, 0.9985384345054626, -0.007124960422515869, 0.9984721541404724, 1.0090384483337402, 0.7692930698394775, 1.0029429197311401, 0.2533344030380249, 0.0014107809402048588, 0.7692267894744873, 0.9219697117805481, 0.2332068681716919, -0.0009664595127105713, 0.9984732866287231, 0.9928748607635498, 0.9986545443534851, 0.007569252047687769, 0.769227921962738, 0.9934804439544678, -0.0018770694732666016, 1.0014104843139648, 0.7694091796875];
+
+
+
+            building.Set(vertex, index, uv);
+            building.LoadTexture("untitled.png");
+            building.position = new Vector3(0, -1, -50);
+            building.rotation = new Vector3(25, 5, 0);
+            building.scale = new Vector3(10,10,10);
+            Render();
+        }
+
+        function Render(now) {
+            now *= 0.001;
+            gl.clearColor(0.5, 0.5, 0.5, 1.0);
+            deltaTime = now - then;
+            then = now;
+            if (Number.isNaN(deltaTime))
+                deltaTime = 0;
+
+            gl.enable(gl.DEPTH_TEST);
+
+            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+            gl.viewport(0, 0, canvas.width, canvas.height);
+
+            mat4.perspective(45, canvas.width / canvas.height, 0.1, 1000.0, projectionMatrix);
+            gl.uniformMatrix4fv(program.pMatrixUniform, false, projectionMatrix);
+
+            gl.enableVertexAttribArray(program.vertexPositionAttribute);
+
+            if (hikouki != null) {
+                hikouki.Render();
+                hikouki.position.x += speed * deltaTime / 2;
+                let max = canvas.width / 19 / 2;
+                if (hikouki.position.x > max)
+                    hikouki.position.x = -max;
+            }
+            if (building != null) {
+                building.Render();
+            }
+
+            gl.useProgram(program);
+            requestAnimFrame(Render);
+        }
+
+        function Input(event) {
+            console.log(event);
+            if (hikouki != null) {
+                if (event.key == "ArrowUp" || event.key == "w" || event.key == "W") {
+                    hikouki.position.y += speed * deltaTime;
+                }
+                if (event.key == "ArrowDown" || event.key == "s" || event.key == "S") {
+                    hikouki.position.y -= speed * deltaTime;
+                }
+            }
+        }
+    </script>
+</head>
+<body style="margin: 0; overflow: hidden;" onresize="Resize()" onload="Start()">
+    <canvas id="canvas"></canvas>
+</body>
+</html>

@@ -15,6 +15,7 @@ namespace NekoApp2D1
         bool jumping;
         protected override void Setup()
         {
+            gameObject.tag = "Player";
             AddComponent<SpriteRenderer>();
             ani = new SpriteSheetAnimation(new Texture2D("C3ZwL.png", Texture2D.MagFilter.Nearest));
             ani.framerate = 8;
