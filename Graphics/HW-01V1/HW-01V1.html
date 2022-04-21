@@ -208,7 +208,6 @@
             }
         }
 
-        var models = [];
         var hikouki;
         var building;
 
@@ -314,7 +313,6 @@
         }
 
         function Input(event) {
-            console.log(event);
             if (hikouki != null) {
                 if (event.key == "ArrowUp" || event.key == "w" || event.key == "W") {
                     hikouki.position.y += speed * deltaTime;
