@@ -17,6 +17,7 @@ var camera, scene, renderer;
 var plane, building;
 var deltaTime, then;
 var speed = 10;
+var planeWasVisible;
 
 const deg2rad = 0.01745;
 
@@ -24,9 +25,6 @@ function onProgress(){}
 function onError(){console.log("Load error")}
 
 function OnResize(){
-    if(renderer!=null || renderer!= undefined){
-        renderer.setSize( window.innerWidth, window.innerHeight );
-    }
 }
 
 function Load(model, OnLoad){
@@ -39,6 +37,53 @@ function Load(model, OnLoad){
 					} 
                     );
     
+}
+
+
+function CreateBuilding(){
+    var geo = new THREE.CubeGeometry( 1, 1, 1 );
+    var tex = new THREE.TextureLoader().load("ground.png");
+    var mat = new THREE.MeshBasicMaterial({
+					map: tex
+				 });
+
+    var obj = new THREE.Mesh( geo, mat );
+    obj.scale.x = 5;
+    obj.scale.y = .7;
+    obj.scale.z = 5;
+    obj.position.z = 5;
+    obj.position.y = -2.5;
+    obj.position.x = 0;
+    scene.add(obj);
+    
+    tex = new THREE.TextureLoader().load("7floor.png");
+    var mat = new THREE.MeshBasicMaterial({
+					map: tex
+				 });
+
+    var obj2 = new THREE.Mesh( geo, mat );
+    obj2.scale.x = 1;
+    obj2.scale.y = 2;
+    obj2.scale.z = 1;
+    obj2.position.z = 5;
+    obj2.position.y = -1.1;
+    obj2.position.x = 1;
+    scene.add(obj2);
+
+    tex = new THREE.TextureLoader().load("3floor.png");
+    var mat = new THREE.MeshBasicMaterial({
+					map: tex
+				 });
+                 
+    var obj3 = new THREE.Mesh( geo, mat );
+    obj3.scale.x = 1;
+    obj3.scale.y = 1;
+    obj3.scale.z = 1;
+    obj3.position.z = 5;
+    obj3.position.y = -1.6;
+    obj3.position.x = -1;
+    scene.add(obj3);
+
 }
 
 function Setup(){
@@ -67,8 +112,10 @@ function Setup(){
         obj.scale.z = 0.3;
         plane = obj;
     });
+    
+    
     Load("building", function(obj){
-        obj.position.y = -2.5;
+        obj.position.y = -1;
         obj.position.x = 1;
         obj.position.z = 5;
         obj.scale.x = 2;
@@ -76,14 +123,14 @@ function Setup(){
         obj.scale.z = 2;
         building = obj
     });
+    
+
+    //CreateBuilding();
 
     renderer = new THREE.WebGLRenderer();
 	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	frame.appendChild( renderer.domElement );
-
-    
-
 }
 
 function Update(now = 0){
@@ -93,6 +140,14 @@ function Update(now = 0){
 
     //camera.lookAt( scene.position );
 	renderer.render( scene, camera );
+
+    if(plane != undefined || plane != null){
+        plane.position.x -= 3 * deltaTime;
+        if(plane.position.x < -7)
+            plane.position.x = 7;
+
+
+    }
 
     requestAnimationFrame(Update)
 }
