@@ -17,6 +17,7 @@
         <li><details><summary>BulletController.cs</summary><div class="code"><pre><code class="language-csharp"><textarea>using NekoEngine;
 using NekoEngine.Assets;
 using NekoEngine.Components;
+using NekoEngine.Physics;
 using NekoEngine.Render.OpenGL;
 using System;
 using System.Collections.Generic;
@@ -33,7 +34,7 @@ namespace NekoApp2D1
 
         float speed = 5f;
         public bool left;
-        public float lifetime = 1f;
+        public float lifetime = 3f;
         protected override void Setup()
         {
             AddComponent<SpriteRenderer>().sprite = new Sprite(new Texture2D("bullet.png", Texture2D.MagFilter.Nearest));
@@ -51,12 +52,24 @@ namespace NekoApp2D1
             if (left)
             {
                 transform.position -= new Vector3(speed * Time.deltaTime, 0, 0);
-                transform.localScale = new Vector3(-1.5f, 1.5f, 1.5f);
+                transform.localScale = new Vector3(-2f, 2f, 1f);
             }
             else
             {
                 transform.position += new Vector3(speed * Time.deltaTime, 0, 0);
-                transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+                transform.localScale = new Vector3(2f, 2f, 1f);
+            }
+        }
+
+        protected override void OnTriggerEnter2D(Collision2D collision)
+        {
+            if (collision.tag != "player")
+            {
+                if(collision.tag == "enemy")
+                {
+
+                }
+                Destroy();
             }
         }
 
@@ -99,9 +112,11 @@ namespace NekoApp2D1
         Single speed = 2f;
         bool onGround;
         bool jumping;
+        float maxJump = 0.3f;
+        float jump;
         protected override void Setup()
         {
-            gameObject.tag = "Player";
+            gameObject.tag = "player";
             AddComponent<SpriteRenderer>();
             ani = new SpriteSheetAnimation(new Texture2D("C3ZwL.png", Texture2D.MagFilter.Nearest));
             ani.framerate = 8;
@@ -138,16 +153,21 @@ namespace NekoApp2D1
             {
                 jumping = false;
             }
-            /*
+            
             if (Input.GetKeyDown(VirtualKey.Space))
             {
                 var tmp = transform.parent.gameObject.Instantiate(transform.position);
                 tmp.AddComponent<BulletController>().left = ani.animation == 1;
             }
-            */
-            if (jumping)
+            
+            if (jumping && jump > 0)
             {
-                transform.position += new Vector3(0, speed * 3 * Time.deltaTime, 0);
+               transform.position += new Vector3(0, speed * 3 * Time.deltaTime, 0);
+                jump -= Time.deltaTime;
+            }
+            else
+            {
+                jump = maxJump;
             }
 
             if (!onGround)
@@ -247,7 +267,7 @@ namespace NekoApp2D1
     <footer>
         Page generated with <a
             href="https://github.com/Animeska34/Lectures/tree/master/HTMLGenerator">HTMLGenerator</a>, <a href="https://github.com/Animeska34/">Animeska34</a>, 2022<br>
-        Page updated: <b>04/29/2022 10:02:42</b>
+        Page updated: <b>05/06/2022 10:56:00</b>
     </footer>
 </body>
 

@@ -1,6 +1,7 @@
 ﻿using NekoEngine;
 using NekoEngine.Assets;
 using NekoEngine.Components;
+using NekoEngine.Physics;
 using NekoEngine.Render.OpenGL;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace NekoApp2D1
 
         float speed = 5f;
         public bool left;
-        public float lifetime = 1f;
+        public float lifetime = 3f;
         protected override void Setup()
         {
             AddComponent<SpriteRenderer>().sprite = new Sprite(new Texture2D("bullet.png", Texture2D.MagFilter.Nearest));
@@ -35,12 +36,24 @@ namespace NekoApp2D1
             if (left)
             {
                 transform.position -= new Vector3(speed * Time.deltaTime, 0, 0);
-                transform.localScale = new Vector3(-1.5f, 1.5f, 1.5f);
+                transform.localScale = new Vector3(-2f, 2f, 1f);
             }
             else
             {
                 transform.position += new Vector3(speed * Time.deltaTime, 0, 0);
-                transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+                transform.localScale = new Vector3(2f, 2f, 1f);
+            }
+        }
+
+        protected override void OnTriggerEnter2D(Collision2D collision)
+        {
+            if (collision.tag != "player")
+            {
+                if(collision.tag == "enemy")
+                {
+
+                }
+                Destroy();
             }
         }
 

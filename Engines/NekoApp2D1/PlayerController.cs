@@ -13,9 +13,11 @@ namespace NekoApp2D1
         Single speed = 2f;
         bool onGround;
         bool jumping;
+        float maxJump = 0.3f;
+        float jump;
         protected override void Setup()
         {
-            gameObject.tag = "Player";
+            gameObject.tag = "player";
             AddComponent<SpriteRenderer>();
             ani = new SpriteSheetAnimation(new Texture2D("C3ZwL.png", Texture2D.MagFilter.Nearest));
             ani.framerate = 8;
@@ -52,16 +54,21 @@ namespace NekoApp2D1
             {
                 jumping = false;
             }
-            /*
+            
             if (Input.GetKeyDown(VirtualKey.Space))
             {
                 var tmp = transform.parent.gameObject.Instantiate(transform.position);
                 tmp.AddComponent<BulletController>().left = ani.animation == 1;
             }
-            */
-            if (jumping)
+            
+            if (jumping && jump > 0)
             {
-                transform.position += new Vector3(0, speed * 3 * Time.deltaTime, 0);
+               transform.position += new Vector3(0, speed * 3 * Time.deltaTime, 0);
+                jump -= Time.deltaTime;
+            }
+            else
+            {
+                jump = maxJump;
             }
 
             if (!onGround)
