@@ -41,7 +41,7 @@ function Load(model, OnLoad){
 
 
 function CreateBuilding(){
-    var geo = new THREE.CubeGeometry( 1, 1, 1 );
+    var geo = new THREE.CubeGeometry( 1.5, 1.5, 1.5 );
     var tex = new THREE.TextureLoader().load("ground.png");
     var mat = new THREE.MeshBasicMaterial({
 					map: tex
@@ -52,7 +52,7 @@ function CreateBuilding(){
     obj.scale.y = .7;
     obj.scale.z = 5;
     obj.position.z = 5;
-    obj.position.y = -2.5;
+    obj.position.y = -2;
     obj.position.x = 0;
     scene.add(obj);
     
@@ -63,10 +63,10 @@ function CreateBuilding(){
 
     var obj2 = new THREE.Mesh( geo, mat );
     obj2.scale.x = 1;
-    obj2.scale.y = 2;
+    obj2.scale.y = 2.5;
     obj2.scale.z = 1;
-    obj2.position.z = 5;
-    obj2.position.y = -1.1;
+    obj2.position.z = 3;
+    obj2.position.y = -0.1;
     obj2.position.x = 1;
     scene.add(obj2);
 
@@ -79,8 +79,8 @@ function CreateBuilding(){
     obj3.scale.x = 1;
     obj3.scale.y = 1;
     obj3.scale.z = 1;
-    obj3.position.z = 5;
-    obj3.position.y = -1.6;
+    obj3.position.z = 3;
+    obj3.position.y = -0.6;
     obj3.position.x = -1;
     scene.add(obj3);
 
@@ -113,7 +113,7 @@ function Setup(){
         plane = obj;
     });
     
-    
+    /*
     Load("building", function(obj){
         obj.position.y = -1;
         obj.position.x = 1;
@@ -123,9 +123,9 @@ function Setup(){
         obj.scale.z = 2;
         building = obj
     });
-    
+    */
 
-    //CreateBuilding();
+    CreateBuilding();
 
     renderer = new THREE.WebGLRenderer();
 	renderer.setPixelRatio( window.devicePixelRatio );
