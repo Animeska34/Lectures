@@ -95,18 +95,6 @@ function Setup(){
         obj.position.y = -1;
         plane = obj;
     });
-    
-    /*
-    Load("building", function(obj){
-        obj.position.y = -1;
-        obj.position.x = 1;
-        obj.position.z = 5;
-        obj.scale.x = 2;
-        obj.scale.y = 2;
-        obj.scale.z = 2;
-        building = obj
-    });
-    */
 
     CreateBuilding();
 
@@ -122,17 +110,7 @@ function Update(now = 0){
     deltaTime = now - then;
     then = now;
 
-    //camera.lookAt( scene.position );
 	renderer.render( scene, camera );
-
-    /*
-    if(plane != undefined || plane != null){
-        plane.position.x -= 3 * deltaTime;
-        if(plane.position.x < -7)
-            plane.position.x = 7;
-    }
-
-*/
 
 if(requestedRotation > 0){
     var rotate = speed * deltaTime;
@@ -159,9 +137,6 @@ function OnKeyDown(event){
                 }
                 if (event.key == "ArrowLeft" || event.key == "a" || event.key == "A") {
                     plane.position.x += speed * deltaTime;
-                }
-                if (event.key == "ArrowRight" || event.key == "d" || event.key == "D") {
-                    plane.position.x -= speed * deltaTime;
                 }
                 if (event.key == "ArrowRight" || event.key == "d" || event.key == "D") {
                     plane.position.x -= speed * deltaTime;
