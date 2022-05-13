@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>HW-02V1</title>
+    <title>KW-02V1</title>
     <link rel="stylesheet" href="../../css/dark.css">
     <link rel="stylesheet" href="../../css/monokai-sublime.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/highlight.min.js"></script>
@@ -12,9 +12,9 @@
 
 <body onload="hljs.highlightAll();">
     <iframe src="../../items/navbar.html" seamless></iframe>
-    <h1>HW-02V1</h1>
+    <h1>KW-02V1</h1>
     <ul style="text-align: left;">
-        <li><details><summary>3floor.png</summary><img height = "200" title="3floor.png" src="https://raw.githubusercontent.com/Animeska34/Lectures/master/Graphics/HW-02V1/3floor.png"></img></details></li><li><details><summary>7floor.png</summary><img height = "200" title="7floor.png" src="https://raw.githubusercontent.com/Animeska34/Lectures/master/Graphics/HW-02V1/7floor.png"></img></details></li><li><a href = "https://raw.githubusercontent.com/Animeska34/Lectures/master/Graphics/HW-02V1/building.mtl">building.mtl</a></li><li><a href = "https://raw.githubusercontent.com/Animeska34/Lectures/master/Graphics/HW-02V1/building.obj">building.obj</a></li><li><details><summary>ground.png</summary><img height = "200" title="ground.png" src="https://raw.githubusercontent.com/Animeska34/Lectures/master/Graphics/HW-02V1/ground.png"></img></details></li><li><details><summary>HW-02V1.html <a href="HW-02V1.html">View</a></summary><pre><div class="code"><code class="language-xml"><textarea><!DOCTYPE html>
+        <li><a href = "https://raw.githubusercontent.com/Animeska34/Lectures/master/Graphics/KW-02V1/01_-_Default1noCulling.dds">01_-_Default1noCulling.dds</a></li><li><a href = "https://raw.githubusercontent.com/Animeska34/Lectures/master/Graphics/KW-02V1/01_-_Default1noCulling.JPG">01_-_Default1noCulling.JPG</a></li><li><details><summary>KW-02V1.html <a href="KW-02V1.html">View</a></summary><pre><div class="code"><code class="language-xml"><textarea><!DOCTYPE html>
 <html>
 	<head>
         <title>HW-02V1</title>
@@ -32,10 +32,10 @@ var frame;
 var camera, scene, renderer;
 var plane, building;
 var deltaTime, then;
-var speed = 10;
-var planeWasVisible;
+var speed = 2;
 
 const deg2rad = 0.01745;
+const rad2deg = 57.29578;
 
 function onProgress(){}
 function onError(){console.log("Load error")}
@@ -57,47 +57,29 @@ function Load(model, OnLoad){
 
 
 function CreateBuilding(){
-    var geo = new THREE.CubeGeometry( 1.5, 1.5, 1.5 );
-    var tex = new THREE.TextureLoader().load("ground.png");
-    var mat = new THREE.MeshBasicMaterial({
-					map: tex
-				 });
 
-    var obj = new THREE.Mesh( geo, mat );
-    obj.scale.x = 5;
-    obj.scale.y = .7;
-    obj.scale.z = 5;
-    obj.position.z = 5;
-    obj.position.y = -2;
+    var group = new THREE.Group();
+    var obj = new THREE.Mesh( new THREE.CubeGeometry( 0.1, 2, 0.1 ), new THREE.MeshBasicMaterial( {color: 0x800000} ));
+    obj.position.z = 0;
+    obj.position.y = 0;
     obj.position.x = 0;
-    scene.add(obj);
-    
-    tex = new THREE.TextureLoader().load("7floor.png");
-    var mat = new THREE.MeshBasicMaterial({
-					map: tex
-				 });
+    group.add(obj);
 
-    var obj2 = new THREE.Mesh( geo, mat );
-    obj2.scale.x = 1;
-    obj2.scale.y = 2.5;
-    obj2.scale.z = 1;
-    obj2.position.z = 3;
-    obj2.position.y = -0.1;
-    obj2.position.x = 1;
-    scene.add(obj2);
 
-    tex = new THREE.TextureLoader().load("3floor.png");
-    var mat = new THREE.MeshBasicMaterial({
-					map: tex
-				 });
-                 
-    var obj3 = new THREE.Mesh( geo, mat );
-    obj3.scale.x = 1;
-    obj3.scale.y = 1;
-    obj3.scale.z = 1;
-    obj3.position.z = 3;
-    obj3.position.y = -0.6;
-    obj3.position.x = -1;
+    var obj2 = new THREE.Mesh( new THREE.SphereGeometry( 0.3, 0.3, 0.3 ), new THREE.MeshBasicMaterial( {color: 0x873e23} ) );
+    obj2.scale.z = 0.5;
+    obj2.position.z = 0;
+    obj2.position.y = 0.5;
+    obj2.position.x = 0;
+    group.position.x = 1;
+    group.add(obj2);
+    scene.add(group);
+    building = group;
+    var obj3 = new THREE.Mesh( new THREE.PlaneGeometry( 5, 5), new THREE.MeshBasicMaterial( {color: 0x3d943b, side: THREE.DoubleSide} ) );
+    obj3.rotation.x = 90 * deg2rad;
+    obj3.position.z = 0;
+    obj3.position.y = -1;
+    obj3.position.x = 0;
     scene.add(obj3);
 
 }
@@ -106,7 +88,7 @@ function Setup(){
     switch (window.location.protocol) {
                 case 'file:':
                     document.clear();
-                    document.writeln("Error: This program cannot run from local file. Press <a href = \"https://animeska34.github.io/Lectures/Graphics/HW-02V1/HW-02V1.html\">here</a> to open it from GH Pages");
+                    document.writeln("Error: This program cannot run from local file. Press <a href = \"https://animeska34.github.io/Lectures/Graphics/KW-02V1/KW-02V1.html\">here</a> to open it from GH Pages");
                     return;
                 default: break;
             }
@@ -121,11 +103,12 @@ function Setup(){
     //camera.add(pointLight);
 	scene.add(camera);
 
-    Load("plane", function(obj){
-        obj.rotation.y = 90 * deg2rad;
-        obj.scale.x = 0.3;
-        obj.scale.y = 0.3;
-        obj.scale.z = 0.3;
+    Load("male02", function(obj){
+        obj.rotation.y = 180 * deg2rad;
+        obj.scale.x = 0.01;
+        obj.scale.y = 0.01;
+        obj.scale.z = 0.01;
+        obj.position.y = -1;
         plane = obj;
     });
     
@@ -149,6 +132,7 @@ function Setup(){
 	frame.appendChild( renderer.domElement );
 }
 
+var requestedRotation = 0;
 function Update(now = 0){
     now *= 0.001;
     deltaTime = now - then;
@@ -157,33 +141,59 @@ function Update(now = 0){
     //camera.lookAt( scene.position );
 	renderer.render( scene, camera );
 
+    /*
     if(plane != undefined || plane != null){
         plane.position.x -= 3 * deltaTime;
         if(plane.position.x < -7)
             plane.position.x = 7;
-
-
     }
 
-    requestAnimationFrame(Update)
+*/
+
+if(requestedRotation > 0){
+    var rotate = speed * deltaTime;
+    if(rotate > requestedRotation){
+    building.rotation.y += requestedRotation;
+    requestedRotation = 0;
+    }
+    else{
+        building.rotation.y += rotate;
+        requestedRotation -= rotate;
+    }
+}
+
+    requestAnimationFrame(Update);
 }
 
 function OnKeyDown(event){
     if (plane != null) {
                 if (event.key == "ArrowUp" || event.key == "w" || event.key == "W") {
-                    plane.position.y += speed * deltaTime;
+                    plane.position.z += speed * deltaTime;
                 }
                 if (event.key == "ArrowDown" || event.key == "s" || event.key == "S") {
-                    plane.position.y -= speed * deltaTime;
+                    plane.position.z -= speed * deltaTime;
+                }
+                if (event.key == "ArrowLeft" || event.key == "a" || event.key == "A") {
+                    plane.position.x += speed * deltaTime;
+                }
+                if (event.key == "ArrowRight" || event.key == "d" || event.key == "D") {
+                    plane.position.x -= speed * deltaTime;
+                }
+                if (event.key == "ArrowRight" || event.key == "d" || event.key == "D") {
+                    plane.position.x -= speed * deltaTime;
                 }
             }
+            if (event.key == " ") {
+                    requestedRotation += 90 * deg2rad;
+                }
+
 }
 
 Setup();
 Update();
         </script>
     </body>
-    </html></textarea></code></div></pre></details></li><li><details><summary>model.png</summary><img height = "200" title="model.png" src="https://raw.githubusercontent.com/Animeska34/Lectures/master/Graphics/HW-02V1/model.png"></img></details></li><li><details><summary>MTLLoader.js</summary><pre><div class="code"><code class="language-js"><textarea>/**
+    </html></textarea></code></div></pre></details></li><li><a href = "https://raw.githubusercontent.com/Animeska34/Lectures/master/Graphics/KW-02V1/male-02-1noCulling.dds">male-02-1noCulling.dds</a></li><li><a href = "https://raw.githubusercontent.com/Animeska34/Lectures/master/Graphics/KW-02V1/male-02-1noCulling.JPG">male-02-1noCulling.JPG</a></li><li><a href = "https://raw.githubusercontent.com/Animeska34/Lectures/master/Graphics/KW-02V1/male02.mtl">male02.mtl</a></li><li><a href = "https://raw.githubusercontent.com/Animeska34/Lectures/master/Graphics/KW-02V1/male02.obj">male02.obj</a></li><li><a href = "https://raw.githubusercontent.com/Animeska34/Lectures/master/Graphics/KW-02V1/male02_dds.mtl">male02_dds.mtl</a></li><li><details><summary>MTLLoader.js</summary><pre><div class="code"><code class="language-js"><textarea>/**
  * Loads a Wavefront .mtl file specifying materials
  *
  * @author angelxuanchang
@@ -1563,7 +1573,7 @@ THREE.OBJLoader = ( function () {
 	return OBJLoader;
 
 } )();
-</textarea></code></div></pre></details></li><li><a href = "https://raw.githubusercontent.com/Animeska34/Lectures/master/Graphics/HW-02V1/plane.mtl">plane.mtl</a></li><li><a href = "https://raw.githubusercontent.com/Animeska34/Lectures/master/Graphics/HW-02V1/plane.obj">plane.obj</a></li><li><details><summary>three.js</summary><pre><div class="code"><code class="language-js"><textarea>(function (global, factory) {
+</textarea></code></div></pre></details></li><li><a href = "https://raw.githubusercontent.com/Animeska34/Lectures/master/Graphics/KW-02V1/orig_02_-_Defaul1noCulling.dds">orig_02_-_Defaul1noCulling.dds</a></li><li><a href = "https://raw.githubusercontent.com/Animeska34/Lectures/master/Graphics/KW-02V1/orig_02_-_Defaul1noCulling.JPG">orig_02_-_Defaul1noCulling.JPG</a></li><li><a href = "https://raw.githubusercontent.com/Animeska34/Lectures/master/Graphics/KW-02V1/readme.txt">readme.txt</a></li><li><details><summary>three.js</summary><pre><div class="code"><code class="language-js"><textarea>(function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
 	typeof define === 'function' && define.amd ? define(['exports'], factory) :
 	(global = global || self, factory(global.THREE = {}));
@@ -50616,12 +50626,12 @@ THREE.OBJLoader = ( function () {
 	Object.defineProperty(exports, '__esModule', { value: true });
 
 }));
-</textarea></code></div></pre></details></li><li><details><summary>Untitled.png</summary><img height = "200" title="Untitled.png" src="https://raw.githubusercontent.com/Animeska34/Lectures/master/Graphics/HW-02V1/Untitled.png"></img></details></li>
+</textarea></code></div></pre></details></li>
     </ul>
     <footer>
         Page generated with <a
             href="https://github.com/Animeska34/Lectures/tree/master/HTMLGenerator">HTMLGenerator</a>, <a href="https://github.com/Animeska34/">Animeska34</a>, 2022<br>
-        Page updated: <b>05/13/2022 09:58:57</b>
+        Page updated: <b>05/13/2022 09:58:58</b>
     </footer>
 </body>
 

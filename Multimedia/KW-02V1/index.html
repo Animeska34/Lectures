@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>KW-02V1</title>
+    <link rel="stylesheet" href="../../css/dark.css">
+    <link rel="stylesheet" href="../../css/monokai-sublime.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/highlight.min.js"></script>
+</head>
+
+<body onload="hljs.highlightAll();">
+    <iframe src="../../items/navbar.html" seamless></iframe>
+    <h1>KW-02V1</h1>
+    <ul style="text-align: left;">
+        <li><details><summary>KW-02V1.html <a href="KW-02V1.html">View</a></summary><pre><div class="code"><code class="language-xml"><textarea><!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            div.rectangle{
+                border: solid 1px #000000; 
+                width:0px; 
+                position: relative;
+                margin: auto;
+                height:100px;
+                transform: translateY(-15px);
+                animation: 1s ani1 1s forwards, 1s ani3 3s forwards;
+            }
+            div.text{
+                text-align: center;
+                position: relative;
+                transform: translateY(-25px);
+                animation: 1s ani2 2s forwards, 1s ani4 3s forwards;
+            }
+            @keyframes ani1{
+                0%{
+                    
+                    width:0px;
+                }
+                100%{
+                    width:300px; 
+                }
+            }
+            @keyframes ani2{
+                0%{
+                    transform: translateY(-25px);
+                }
+                100%{
+                    transform: translateY(40px);
+                }
+            }
+            @keyframes ani3 {
+                0%{
+                    transform: translate(0%, -15px);
+                }
+                100%{
+                    transform: translate(-110%, -15px);
+                }
+            }
+            @keyframes ani4 {
+                0%{
+                    transform: translate(0%, 40px);
+                }
+                100%{
+                    transform: translate(100%, 40px);
+                }
+            }
+        </style>
+    </head>
+    <body>
+
+        <div style="overflow: hidden; width:305px; height:105px; text-align: center;">   
+            <div class = "text">
+                Valio
+            </div>
+            <div class = "rectangle"></div>
+        </div>
+    </body>
+</html></textarea></code></div></pre></details></li>
+    </ul>
+    <footer>
+        Page generated with <a
+            href="https://github.com/Animeska34/Lectures/tree/master/HTMLGenerator">HTMLGenerator</a>, <a href="https://github.com/Animeska34/">Animeska34</a>, 2022<br>
+        Page updated: <b>05/13/2022 09:58:58</b>
+    </footer>
+</body>
+
+</html>

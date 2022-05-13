@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<head>
+<title>HW-02V1</title>
+</head>
+Cycle radius <input id="radius" type="number" value="40"><button onclick="document.getElementById('circle').setAttribute('r', document.getElementById('radius').value);">Set</button><br>
+<svg style="border: solid 1px #000000; width: 800px; height: 600px;">
+    <circle  id="circle" cx="100" cy="300" r="40" style="stroke:#000000; fill:#c93d2b;" onclick="isThrowing = true"/>
+    <g style="stroke:#000000; fill:#2bc92b;">
+        <rect id="gate1" x="775" y="0" height="75" width="25" />
+        <rect id="gate2" x="775" y="150" height="75" width="25" />
+    </g>
+</svg>
+
+<script>
+    var circle = document.getElementById("circle");
+    var gate1 = document.getElementById("gate1");
+    var gate2 = document.getElementById("gate2");
+    var gatePos = 0;
+    var gateSpeed = 200;
+    var gateDir = -1;
+
+    var circlePos = 100;
+    var circleSpeed = 500;
+    var circleReturns = false;
+
+    var deltaTime = 0, then = 0;
+    var isThrowing = false;
+
+    function MoveGate(){
+        if(gatePos >= 375)
+            gateDir = -1;
+        if(gatePos <= 0)
+            gateDir = +1;
+        gatePos += gateSpeed * deltaTime * gateDir;
+            
+        gate1.setAttribute("y", gatePos);
+        gate2.setAttribute("y", gatePos + 150);
+    }
+    function MoveCircle(){
+        if(!circleReturns){
+            if(circlePos < 775){
+                circlePos += deltaTime * circleSpeed;
+            }
+            else{
+                var r = circle.getAttribute("r");
+                var addSpace = 38 - r;
+               if(r < 38 && gatePos > 185 - addSpace && gatePos < 185 + addSpace){
+                    gateDir=0;
+                    isThrowing = false;
+               }
+               else{
+                   circleReturns = true;
+               }
+            }
+        }
+        else{
+            if(circlePos > 100){
+                circlePos -= deltaTime * circleSpeed;
+            }
+            else{
+                circleReturns = false;
+                isThrowing = false;
+            }
+        }
+        
+        circle.setAttribute("cx", circlePos);
+    }
+
+    function Setup(){}
+    function Update(now = 0){
+    now *= 0.001;
+    deltaTime = now - then;
+    then = now;
+    MoveGate();
+    if(isThrowing){
+        MoveCircle();
+    }
+
+    requestAnimationFrame(Update);
+    }
+
+    Setup();
+    Update();
+
+</script>
+</body>

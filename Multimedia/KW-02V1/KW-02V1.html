@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            div.rectangle{
+                border: solid 1px #000000; 
+                width:0px; 
+                position: relative;
+                margin: auto;
+                height:100px;
+                transform: translateY(-15px);
+                animation: 1s ani1 1s forwards, 1s ani3 3s forwards;
+            }
+            div.text{
+                text-align: center;
+                position: relative;
+                transform: translateY(-25px);
+                animation: 1s ani2 2s forwards, 1s ani4 3s forwards;
+            }
+            @keyframes ani1{
+                0%{
+                    
+                    width:0px;
+                }
+                100%{
+                    width:300px; 
+                }
+            }
+            @keyframes ani2{
+                0%{
+                    transform: translateY(-25px);
+                }
+                100%{
+                    transform: translateY(40px);
+                }
+            }
+            @keyframes ani3 {
+                0%{
+                    transform: translate(0%, -15px);
+                }
+                100%{
+                    transform: translate(-110%, -15px);
+                }
+            }
+            @keyframes ani4 {
+                0%{
+                    transform: translate(0%, 40px);
+                }
+                100%{
+                    transform: translate(100%, 40px);
+                }
+            }
+        </style>
+    </head>
+    <body>
+
+        <div style="overflow: hidden; width:305px; height:105px; text-align: center;">   
+            <div class = "text">
+                Valio
+            </div>
+            <div class = "rectangle"></div>
+        </div>
+    </body>
+</html>

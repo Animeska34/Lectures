@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <title>HW-02V1</title>
+		<script src="three.js"></script>
+		<script src="OBJLoader.js"></script>
+        <script src="MTLLoader.js"></script>
+    </head>
+	
+	<body style="margin: 0; overflow: hidden;" onkeydown="OnKeyDown(event);" onresize="OnResize();">
+		<div id="frame" >
+		</div>
+        <script>
+
+var frame;
+var camera, scene, renderer;
+var plane, building;
+var deltaTime, then;
+var speed = 2;
+
+const deg2rad = 0.01745;
+const rad2deg = 57.29578;
+
+function onProgress(){}
+function onError(){console.log("Load error")}
+
+function OnResize(){
+}
+
+function Load(model, OnLoad){
+    new THREE.MTLLoader().load( model + '.mtl', function ( materials ) {
+						materials.preload();
+						new THREE.OBJLoader().setMaterials( materials ).load( model + '.obj', function ( object ) {
+								scene.add( object );
+                            OnLoad(object);
+							}, onProgress, onError );
+					} 
+                    );
+    
+}
+
+
+function CreateBuilding(){
+
+    var group = new THREE.Group();
+    var obj = new THREE.Mesh( new THREE.CubeGeometry( 0.1, 2, 0.1 ), new THREE.MeshBasicMaterial( {color: 0x800000} ));
+    obj.position.z = 0;
+    obj.position.y = 0;
+    obj.position.x = 0;
+    group.add(obj);
+
+
+    var obj2 = new THREE.Mesh( new THREE.SphereGeometry( 0.3, 0.3, 0.3 ), new THREE.MeshBasicMaterial( {color: 0x873e23} ) );
+    obj2.scale.z = 0.5;
+    obj2.position.z = 0;
+    obj2.position.y = 0.5;
+    obj2.position.x = 0;
+    group.position.x = 1;
+    group.add(obj2);
+    scene.add(group);
+    building = group;
+    var obj3 = new THREE.Mesh( new THREE.PlaneGeometry( 5, 5), new THREE.MeshBasicMaterial( {color: 0x3d943b, side: THREE.DoubleSide} ) );
+    obj3.rotation.x = 90 * deg2rad;
+    obj3.position.z = 0;
+    obj3.position.y = -1;
+    obj3.position.x = 0;
+    scene.add(obj3);
+
+}
+
+function Setup(){
+    switch (window.location.protocol) {
+                case 'file:':
+                    document.clear();
+                    document.writeln("Error: This program cannot run from local file. Press <a href = \"https://animeska34.github.io/Lectures/Graphics/KW-02V1/KW-02V1.html\">here</a> to open it from GH Pages");
+                    return;
+                default: break;
+            }
+    frame = document.getElementById("frame");
+    camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
+    camera.position.z = -10;
+    camera.rotation.y = 180 * deg2rad;
+    scene = new THREE.Scene();
+    var ambientLight = new THREE.AmbientLight( 0xcccccc, 1 );
+    //var pointLight = new THREE.PointLight( 0xffffff, 0.2 );
+	scene.add(ambientLight);
+    //camera.add(pointLight);
+	scene.add(camera);
+
+    Load("male02", function(obj){
+        obj.rotation.y = 180 * deg2rad;
+        obj.scale.x = 0.01;
+        obj.scale.y = 0.01;
+        obj.scale.z = 0.01;
+        obj.position.y = -1;
+        plane = obj;
+    });
+    
+    /*
+    Load("building", function(obj){
+        obj.position.y = -1;
+        obj.position.x = 1;
+        obj.position.z = 5;
+        obj.scale.x = 2;
+        obj.scale.y = 2;
+        obj.scale.z = 2;
+        building = obj
+    });
+    */
+
+    CreateBuilding();
+
+    renderer = new THREE.WebGLRenderer();
+	renderer.setPixelRatio( window.devicePixelRatio );
+	renderer.setSize( window.innerWidth, window.innerHeight );
+	frame.appendChild( renderer.domElement );
+}
+
+var requestedRotation = 0;
+function Update(now = 0){
+    now *= 0.001;
+    deltaTime = now - then;
+    then = now;
+
+    //camera.lookAt( scene.position );
+	renderer.render( scene, camera );
+
+    /*
+    if(plane != undefined || plane != null){
+        plane.position.x -= 3 * deltaTime;
+        if(plane.position.x < -7)
+            plane.position.x = 7;
+    }
+
+*/
+
+if(requestedRotation > 0){
+    var rotate = speed * deltaTime;
+    if(rotate > requestedRotation){
+    building.rotation.y += requestedRotation;
+    requestedRotation = 0;
+    }
+    else{
+        building.rotation.y += rotate;
+        requestedRotation -= rotate;
+    }
+}
+
+    requestAnimationFrame(Update);
+}
+
+function OnKeyDown(event){
+    if (plane != null) {
+                if (event.key == "ArrowUp" || event.key == "w" || event.key == "W") {
+                    plane.position.z += speed * deltaTime;
+                }
+                if (event.key == "ArrowDown" || event.key == "s" || event.key == "S") {
+                    plane.position.z -= speed * deltaTime;
+                }
+                if (event.key == "ArrowLeft" || event.key == "a" || event.key == "A") {
+                    plane.position.x += speed * deltaTime;
+                }
+                if (event.key == "ArrowRight" || event.key == "d" || event.key == "D") {
+                    plane.position.x -= speed * deltaTime;
+                }
+                if (event.key == "ArrowRight" || event.key == "d" || event.key == "D") {
+                    plane.position.x -= speed * deltaTime;
+                }
+            }
+            if (event.key == " ") {
+                    requestedRotation += 90 * deg2rad;
+                }
+
+}
+
+Setup();
+Update();
+        </script>
+    </body>
+    </html>
