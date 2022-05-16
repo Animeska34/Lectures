@@ -14,8 +14,6 @@ namespace NekoApp2D1
 {
     class BulletController : Component
     {
-        static Sprite sprite;
-
         float speed = 5f;
         public bool left;
         public float lifetime = 3f;
@@ -24,7 +22,7 @@ namespace NekoApp2D1
             AddComponent<SpriteRenderer>().sprite = new Sprite(new Texture2D("bullet.png", Texture2D.MagFilter.Nearest));
             AddComponent<BoxCollder2D>().isTrigger = true;
             AddComponent<Rigidbody2D>().useGravity = false;
-            transform.position += new Vector3(0,0,2);
+            transform.position += new Vector3(0,0,-3);
         }
         protected override void Update()
         {
@@ -50,10 +48,9 @@ namespace NekoApp2D1
             if (collision.tag != "player")
             {
                 if(collision.tag == "enemy")
-                {
-
-                }
-                Destroy();
+                    collision.gameObject.Destroy();
+                if (collision.tag != "parcicle" || collision.tag != "bullet")
+                    Destroy();
             }
         }
 

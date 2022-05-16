@@ -13,11 +13,21 @@ namespace NekoApp2D1
             //Starting NekoEngine
             new Program();
         }
-        Scene scene;
+        static Scene scene;
         public override void OnLoad()
         {
             //Change window title
             Neko.title = AppDomain.CurrentDomain.FriendlyName;
+
+            Input.map.Add("up", VirtualKey.W);
+            Input.map.Add("left", VirtualKey.A);
+            Input.map.Add("right", VirtualKey.D);
+
+            Start();
+        }
+
+        public static void Start()
+        {
             //Creating scene and attaching camera
             scene = new Scene();
             var c = scene.root.Instantiate(new Vector3(0, 0, -10)).AddComponent<Camera>();
@@ -32,11 +42,18 @@ namespace NekoApp2D1
             InstantiatePlatform(new Vector3(5, -4, 1));
             InstantiatePlatform(new Vector3(10, -3, 1));
             InstantiateFinishPlatform(new Vector3(15, -5, 1));
+            InstantiateE1(new Vector3(10, -2, 1));
             scene.Start();
-
         }
 
-        void InstantiatePlatform(Vector3 pos)
+        static void InstantiateE1(Vector3 pos)
+        {
+            var tmp = scene.root.Instantiate();
+            tmp.transform.position = pos;
+            tmp.AddComponent<E1Controller>();
+        }
+
+        static void InstantiatePlatform(Vector3 pos)
         {
             var tmp = scene.root.Instantiate();
             tmp.transform.position = pos;
@@ -44,7 +61,7 @@ namespace NekoApp2D1
             tmp.AddComponent<BoxCollder2D>();
             tmp.tag = "ground";
         }
-        void InstantiateCyclePlatform(Vector3 pos)
+        static void InstantiateCyclePlatform(Vector3 pos)
         {
             var tmp = scene.root.Instantiate();
             tmp.transform.position = pos;
@@ -53,7 +70,7 @@ namespace NekoApp2D1
             tmp.tag = "ground";
         }
 
-        void InstantiateFinishPlatform(Vector3 pos)
+        static void InstantiateFinishPlatform(Vector3 pos)
         {
             var tmp = scene.root.Instantiate();
             tmp.transform.position = pos;

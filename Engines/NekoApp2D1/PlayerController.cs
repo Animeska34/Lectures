@@ -25,10 +25,6 @@ namespace NekoApp2D1
             AddComponent<BoxCollder2D>().size = new Vector2(0.1f, 2f);
             AddComponent<Rigidbody2D>();
             Camera.Main.transform.SetParent(transform);
-
-            Input.map.Add("up", VirtualKey.W);
-            Input.map.Add("left", VirtualKey.A);
-            Input.map.Add("right", VirtualKey.D);
         }
         protected override void Update()
         {
@@ -85,10 +81,18 @@ namespace NekoApp2D1
                 ani.SetFrame(1);
         }
 
+        protected override void OnTriggerEnter2D(Collision2D collision)
+        {
+            if(collision.tag == "parcicle")
+                Program.Start();
+        }
+
         protected override void OnCollisionEnter2D(Collision2D collision)
         {
             if(collision.tag == "ground")
                 onGround = true;
+            if (collision.tag == "enemy")
+                Program.Start();
         }
         protected override void OnCollisionExit2D(Collision2D collision)
         {

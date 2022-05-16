@@ -30,8 +30,6 @@ namespace NekoApp2D1
 {
     class BulletController : Component
     {
-        static Sprite sprite;
-
         float speed = 5f;
         public bool left;
         public float lifetime = 3f;
@@ -40,7 +38,7 @@ namespace NekoApp2D1
             AddComponent<SpriteRenderer>().sprite = new Sprite(new Texture2D("bullet.png", Texture2D.MagFilter.Nearest));
             AddComponent<BoxCollder2D>().isTrigger = true;
             AddComponent<Rigidbody2D>().useGravity = false;
-            transform.position += new Vector3(0,0,2);
+            transform.position += new Vector3(0,0,-3);
         }
         protected override void Update()
         {
@@ -66,10 +64,9 @@ namespace NekoApp2D1
             if (collision.tag != "player")
             {
                 if(collision.tag == "enemy")
-                {
-
-                }
-                Destroy();
+                    collision.gameObject.Destroy();
+                if (collision.tag != "parcicle" || collision.tag != "bullet")
+                    Destroy();
             }
         }
 
@@ -79,7 +76,55 @@ namespace NekoApp2D1
         }
     }
 }
-</textarea></code></pre></div></details></li><li><details><summary>Finish.cs</summary><div class="code"><pre><code class="language-csharp"><textarea>using NekoEngine;
+</textarea></code></pre></div></details></li><li><details><summary>E1Controller.cs</summary><div class="code"><pre><code class="language-csharp"><textarea>using NekoEngine;
+using NekoEngine.Assets;
+using NekoEngine.Components;
+using NekoEngine.Render.OpenGL;
+using System.Numerics;
+
+namespace NekoApp2D1
+{
+    public class E1Controller : Component
+    {
+        float rotationSpeed = 100f;
+
+        GameObject parcicles;
+        private void AddParcicle(Vector3 v)
+        {
+            var tmp = parcicles.Instantiate();
+            tmp.transform.position = transform.position + v + new Vector3(0,0,-2);
+            tmp.AddComponent<SpriteRenderer>().sprite = new Sprite(new Texture2D("ray.png", Texture2D.MagFilter.Nearest));
+            tmp.tag = "parcicle";
+            var col = tmp.AddComponent<CycleCollder2D>();
+            col.radius = 0.5f;
+            col.isTrigger = true;
+        }
+        //Calls once, when component created
+        protected override void Setup()
+        {
+            AddComponent<SpriteRenderer>().sprite = new Sprite(new Texture2D("E1.png", Texture2D.MagFilter.Nearest));
+            parcicles = gameObject.Instantiate();
+            AddParcicle(new Vector3(1.5f, 0, 0));
+            AddParcicle(new Vector3(-1.5f, 0, 0));
+            AddParcicle(new Vector3(0, 1.5f, 0));
+            AddParcicle(new Vector3(0, -1.5f, 0));
+            gameObject.tag = "enemy";
+            AddComponent<CycleCollder2D>().radius = 1f;
+
+        }
+        //Calls on every frame update
+        protected override void Update()
+        {
+            var rot = new Vector3(0, 0, rotationSpeed * Time.deltaTime);
+
+            parcicles.transform.localEulerAngles += rot;
+            foreach (var item in parcicles.transform.GetChilds())
+            {
+                item.localEulerAngles += rot * 10;
+            }
+        }
+    }
+}</textarea></code></pre></div></details></li><li><details><summary>Finish.cs</summary><div class="code"><pre><code class="language-csharp"><textarea>using NekoEngine;
 using NekoEngine.Physics;
 using System.Numerics;
 
@@ -124,10 +169,6 @@ namespace NekoApp2D1
             AddComponent<BoxCollder2D>().size = new Vector2(0.1f, 2f);
             AddComponent<Rigidbody2D>();
             Camera.Main.transform.SetParent(transform);
-
-            Input.map.Add("up", VirtualKey.W);
-            Input.map.Add("left", VirtualKey.A);
-            Input.map.Add("right", VirtualKey.D);
         }
         protected override void Update()
         {
@@ -184,10 +225,18 @@ namespace NekoApp2D1
                 ani.SetFrame(1);
         }
 
+        protected override void OnTriggerEnter2D(Collision2D collision)
+        {
+            if(collision.tag == "parcicle")
+                Program.Start();
+        }
+
         protected override void OnCollisionEnter2D(Collision2D collision)
         {
             if(collision.tag == "ground")
                 onGround = true;
+            if (collision.tag == "enemy")
+                Program.Start();
         }
         protected override void OnCollisionExit2D(Collision2D collision)
         {
@@ -211,11 +260,21 @@ namespace NekoApp2D1
             //Starting NekoEngine
             new Program();
         }
-        Scene scene;
+        static Scene scene;
         public override void OnLoad()
         {
             //Change window title
             Neko.title = AppDomain.CurrentDomain.FriendlyName;
+
+            Input.map.Add("up", VirtualKey.W);
+            Input.map.Add("left", VirtualKey.A);
+            Input.map.Add("right", VirtualKey.D);
+
+            Start();
+        }
+
+        public static void Start()
+        {
             //Creating scene and attaching camera
             scene = new Scene();
             var c = scene.root.Instantiate(new Vector3(0, 0, -10)).AddComponent<Camera>();
@@ -230,11 +289,18 @@ namespace NekoApp2D1
             InstantiatePlatform(new Vector3(5, -4, 1));
             InstantiatePlatform(new Vector3(10, -3, 1));
             InstantiateFinishPlatform(new Vector3(15, -5, 1));
+            InstantiateE1(new Vector3(10, -2, 1));
             scene.Start();
-
         }
 
-        void InstantiatePlatform(Vector3 pos)
+        static void InstantiateE1(Vector3 pos)
+        {
+            var tmp = scene.root.Instantiate();
+            tmp.transform.position = pos;
+            tmp.AddComponent<E1Controller>();
+        }
+
+        static void InstantiatePlatform(Vector3 pos)
         {
             var tmp = scene.root.Instantiate();
             tmp.transform.position = pos;
@@ -242,7 +308,7 @@ namespace NekoApp2D1
             tmp.AddComponent<BoxCollder2D>();
             tmp.tag = "ground";
         }
-        void InstantiateCyclePlatform(Vector3 pos)
+        static void InstantiateCyclePlatform(Vector3 pos)
         {
             var tmp = scene.root.Instantiate();
             tmp.transform.position = pos;
@@ -251,7 +317,7 @@ namespace NekoApp2D1
             tmp.tag = "ground";
         }
 
-        void InstantiateFinishPlatform(Vector3 pos)
+        static void InstantiateFinishPlatform(Vector3 pos)
         {
             var tmp = scene.root.Instantiate();
             tmp.transform.position = pos;
@@ -267,7 +333,7 @@ namespace NekoApp2D1
     <footer>
         Page generated with <a
             href="https://github.com/Animeska34/Lectures/tree/master/HTMLGenerator">HTMLGenerator</a>, <a href="https://github.com/Animeska34/">Animeska34</a>, 2022<br>
-        Page updated: <b>05/13/2022 10:13:15</b>
+        Page updated: <b>05/16/2022 18:34:02</b>
     </footer>
 </body>
 
