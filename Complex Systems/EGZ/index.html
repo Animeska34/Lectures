@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>EGZ</title>
+    <link rel="stylesheet" href="../../css/dark.css">
+    <link rel="stylesheet" href="../../css/monokai-sublime.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/highlight.min.js"></script>
+</head>
+
+<body onload="hljs.highlightAll();">
+    <iframe src="../../items/navbar.html" seamless></iframe>
+    <h1>EGZ</h1>
+    <ul style="text-align: left;">
+        <li><details><summary>EGZ 1.py</summary><div class="code"><pre><code class="language-python"><textarea>import tkinter as tk
+
+window = tk.Tk()
+window.resizable(False, False)
+
+frame1 = tk.Frame(master=window, height=100, width=150, relief=tk.FLAT, bg="red")
+frame1.grid(row=0,column=0)
+frame2 = tk.Frame(master=window, height=100, width=150, relief=tk.FLAT, bg="yellow")
+frame2.grid(row=0,column=1)
+frame3 = tk.Frame(master=window, height=100, width=150, relief=tk.FLAT, bg="blue")
+frame3.grid(row=0,column=2)
+window.mainloop()
+</textarea></code></pre></div></details></li><li><details><summary>EGZ 2.py</summary><div class="code"><pre><code class="language-python"><textarea>import tkinter as tk
+from tkinter import messagebox
+
+window = tk.Tk();
+window.title("Egzamono Uzduotis :)")
+window.resizable(False, False)
+label = tk.Label(text = "Iveskite du zodzius", width=30)
+label.pack();
+text = tk.StringVar()
+entry = tk.Entry(width = 30, textvariable=text)
+entry.pack();
+
+def message():
+   messagebox.showinfo("Du zodziai", "Du zodziai: " + text.get())
+
+control = tk.Frame()
+ok = tk.Button(text="Ok", master=control, width=5, command = message)
+ok.pack(pady=2, padx=30, side = tk.RIGHT)
+cncl = tk.Button(text="Cancel", master=control, width=5, command=window.destroy)
+cncl.pack(pady=2, padx=30, side = tk.LEFT)
+
+control.pack()
+
+window.mainloop();
+</textarea></code></pre></div></details></li>
+    </ul>
+    <footer>
+        Page generated with <a
+            href="https://github.com/Animeska34/Lectures/tree/master/HTMLGenerator">HTMLGenerator</a>, <a href="https://github.com/Animeska34/">Animeska34</a>, 2022<br>
+        Page updated: <b>07/05/2022 17:36:41</b>
+    </footer>
+</body>
+
+</html>

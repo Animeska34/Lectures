@@ -32,7 +32,7 @@ namespace NekoApp2D1
             AddParcicle(new Vector3(0, -1.5f, 0));
             gameObject.tag = "enemy";
             AddComponent<CycleCollder2D>().radius = 1f;
-
+            //transform.GetChilds()[0].GetChilds()[0].gameObject.AddComponent<GameObjectDebug>();
         }
         //Calls on every frame update
         protected override void Update()

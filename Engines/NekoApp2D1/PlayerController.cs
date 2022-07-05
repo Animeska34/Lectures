@@ -73,7 +73,7 @@ namespace NekoApp2D1
             }
 
             if (transform.position.Y < -10)
-                transform.position = Vector3.Zero;
+                Program.Start();
 
             if (!ani.playing)
                 ani.SetFrame(0);
