@@ -1,0 +1,118 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito&family=Roboto:wght@300&display=swap');
+html{
+    background-color: rgb(31, 30, 29); 
+    font-family:'UD Digi Kyokasho NP-R', 'Nunito', 'Roboto', 'Segoe UI', "Arial", sans-serif; 
+    color: white;
+    margin: 0 auto;
+    width: 50%;
+    text-align: center;
+    width: fit-content;
+    width: -moz-fit-content;
+    height: max-content;
+    font-size: 20px;
+}
+
+h1{
+    color: orange;
+    font-style: bold;
+    text-align: center;
+    
+}
+h3{
+    color: rgb(248, 219, 89);
+    font-weight: bold;
+    text-align: center;
+}
+p{
+    color: rgb(107, 96, 71);
+    text-align: left;
+}
+
+
+img{
+    border-radius: 10%;
+}
+
+hr{
+    border-color: rgb(206, 154, 12); 
+    margin-left: 0;
+}
+
+hr.divider{
+  border-color: rgba(71, 53, 5, 0);  
+  border-top: 5px dotted rgb(248, 219, 89);
+  width: 300px;
+  margin-left: auto;
+  
+}
+
+footer{
+    font-style: italic;
+    font-size: small;
+    color: rgb(68, 68, 67);
+}
+
+iframe{
+   height: 35pt;
+   border: 0;
+   width: 100%;
+}
+
+li{
+    text-align: left;
+    color: rgb(214, 137, 37);
+}
+
+a{
+    color: rgb(196, 100, 21);
+    height: 100;
+}
+
+a:hover{
+    height: 0;
+    margin: 0;
+    color: rgb(196, 27, 21);
+    font-size: larger;
+    font-style: bold;
+}
+
+a.button{
+    margin-top: auto;
+    text-decoration: none;
+    border: 5px solid rgb(196, 100, 21);
+    border-radius: 20px;
+    color:rgb(31, 30, 29); 
+    background-color: rgb(196, 100, 21);
+    height: 90;
+}
+
+a.button:hover{
+    background-color: brown;
+    border-color: brown;
+    font-weight: bold;
+}
+
+.code{
+    background: #23241f;
+    font-size: 14px;
+    font-family: "Cascadia Mono", "Roboto", "Arial";
+    padding: 8px;
+    white-space: pre;
+    counter-reset: line;
+    border-radius: 10px;
+}
+
+table {
+    border: 1px solid orange;
+    border-radius: 5px;
+}
+
+td, th{
+    border-bottom: 1px dotted orange;
+    border-right: 1px dotted orange;
+    text-align: center;
+}
+.container{
+    display: flex;
+    flex-direction: row;
+}
