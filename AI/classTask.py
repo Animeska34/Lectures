@@ -1,3 +1,5 @@
+import PyCUI
+
 class Human:
     def __init__(this, n):
         this.name = n
@@ -53,16 +55,21 @@ class College:
 
 c = College()
 while True:
-    print("enter 1 to add student, 2 to add mark, 3 to get best")
-    i = input()
+    print("Please, select an option:")
+    menu = ["Add student", "Add mark", "Best student"]
+    i = PyCUI.Selector(menu).Show()
 
-    if i == "1":
+    if i == menu[0]:
         print("enter name")
         c.Enter(Student(input(), []))
-    elif i == "2":
+    elif i == menu[1]:
         print("enter name")
         n = input()
         print("enter mark")
         c.SetMark(n, int(input()))
     else:
         print(str(c.Best()))
+        PyCUI.Pause()
+    
+    
+    PyCUI.ClearConsole()
