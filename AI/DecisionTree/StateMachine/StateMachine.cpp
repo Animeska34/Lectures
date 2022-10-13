@@ -29,7 +29,5 @@ void テスト() {
 
 int main()
 {
-    const char* options[3] = { "01", "02", "03" };
-    ShowSelector(options, 3);
-    //return Demo::entry();
+    return Demo::entry();
 }
