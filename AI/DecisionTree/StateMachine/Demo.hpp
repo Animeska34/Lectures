@@ -1,8 +1,6 @@
 #pragma once
 
 #include <iostream>
-
-#include "SMBase.hpp"
 #include "SMState.hpp"
 
 using namespace std;
@@ -19,7 +17,7 @@ namespace Demo {
 	};
 
 	DemoAction* CreateActions(const char **items, int count) {
-		DemoAction *first, *last, *current;
+		DemoAction *first = 0, *last = 0, *current = 0;
 		for (int i = 0; i < count; i++) {
 			current = new DemoAction();
 			current->actionText = *items[i];
@@ -38,8 +36,7 @@ namespace Demo {
 		const char ** text;
 		int textCount;
 
-        bool Test() {}
-		Action* GetAction() {
+		virtual Action* GetAction() {
 			return CreateActions(text, textCount);
 		}
 
@@ -100,7 +97,7 @@ namespace Demo {
 
 
 
-    int main()
+    int entry()
     {
         int option;
         // string masyvai, naudojami visose busenose

@@ -1,7 +1,8 @@
 ﻿#include <iostream>
-#include "SMBase.hpp"
+#include "Demo.hpp"
 
 using namespace std;
+
 
 class 学生 {
 public:
@@ -24,9 +25,11 @@ void テスト() {
     std::cout << "Last Student: " << この->名前 << endl;
 }
 
-#include "Demo.hpp"
+#include "D:\repos\CUI\Ports\C++\CUIC.h"
 
 int main()
 {
-    return Demo::main();
+    const char* options[3] = { "01", "02", "03" };
+    ShowSelector(options, 3);
+    //return Demo::entry();
 }

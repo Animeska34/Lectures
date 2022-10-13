@@ -3,28 +3,28 @@
 using namespace std;
 
 namespace DecisionTree {
-	class DecisionTreeNode {
+	class Node {
 	public:
-		virtual DecisionTreeNode* MakeDecision() = 0;
+		virtual Node* MakeDecision() = 0;
 	};
 
 
-	class DecisionTreeAction : public DecisionTreeNode {
+	class Action : public Node {
 	public:
-		virtual DecisionTreeNode* MakeDecision() {
+		virtual Node* MakeDecision() {
 			return this;
 		}
 		virtual void PerformAction() = 0;
 	};
 
-	class Decision : public DecisionTreeNode {
+	class Decision : public Node {
 	public:
-		DecisionTreeNode* trueBranch;
-		DecisionTreeNode* falseBranch;
+		Node* trueBranch;
+		Node* falseBranch;
 
 		virtual bool GetBranch() = 0;
 
-		virtual DecisionTreeNode* MakeDecision() {
+		virtual Node* MakeDecision() {
 			if (GetBranch())
 				return trueBranch == NULL ? NULL : trueBranch->MakeDecision();
 			else
@@ -42,23 +42,24 @@ namespace DecisionTree {
 			return buff[0] == 'y' ? true : false;
 		};
 	};
+}
 
-	class DemoAction : public DecisionTreeAction {
+using namespace DecisionTree;
+
+	class DemoAction : public Action {
 	public:
 		const char* act;
 		virtual void PerformAction() {
 			cout << act << endl;
 		}
 	};
-	class BeepAction : public DecisionTreeAction {
+	class BeepAction : public Action {
 	public:
 		virtual void PerformAction() {
 			
 		}
 	};
-}
 
-using namespace DecisionTree;
 int main()
 {
 	InteractiveDecision decisions[7];
@@ -101,8 +102,8 @@ int main()
 
 
 	while (true) {
-		DecisionTreeNode* node = decisions[0].MakeDecision();
-		((DecisionTreeAction*)node)->PerformAction();
+		Node* node = decisions[0].MakeDecision();
+		((Action*)node)->PerformAction();
 		system("PAUSE");
 	}
 }

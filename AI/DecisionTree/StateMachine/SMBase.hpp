@@ -28,7 +28,9 @@ namespace SM {
 
 	class Condition {
 	public:
-		virtual bool Test() = 0;
+		virtual bool Test() {
+			return true;
+		}
 	};
 
 	class ConditionalTransitionMixin : public Condition
@@ -38,7 +40,6 @@ namespace SM {
 		virtual bool IsTriggered() {
 			return condition->Test();
 		}
-		virtual bool Test() {};
 	};
 
 	//Test classes
