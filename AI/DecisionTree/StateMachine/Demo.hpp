@@ -6,102 +6,107 @@
 using namespace std;
 using namespace SM;
 
-namespace Demo {
-	class DemoAction : public Action 
-	{
-	public:
-		string actionText;
-		virtual void Act() {
-			cout << actionText << endl;
-		}
-	};
+namespace Demo
+{
+    class DemoAction : public Action
+    {
+    public:
+        string actionText;
+        virtual void Act()
+        {
+            cout << actionText << endl;
+        }
+    };
 
-	DemoAction* CreateActions(const char **items, int count) {
-		DemoAction *first = 0, *last = 0, *current = 0;
-		for (int i = 0; i < count; i++) {
-			current = new DemoAction();
-			current->actionText = *items[i];
-			if (i == 0)
-				first = current;
-			if (last)
-				last->next = current;
-			last = current;
-		}
-		return first;
-	}
+    DemoAction *CreateActions(const char **items, int count)
+    {
+        DemoAction *first = 0, *last = 0, *current = 0;
+        for (int i = 0; i < count; i++)
+        {
+            current = new DemoAction();
+            current->actionText = *items[i];
+            if (i == 0)
+                first = current;
+            if (last)
+                last->next = current;
+            last = current;
+        }
+        return first;
+    }
 
-	class DemoTransition : public Transition, public ConditionalTransitionMixin, public FixedTargetTransitionMixin
-	{
-	public:
-		const char ** text;
-		int textCount;
+    class DemoTransition : public Transition, public ConditionalTransitionMixin, public FixedTargetTransitionMixin
+    {
+    public:
+        const char **text;
+        int textCount;
 
-		virtual Action* GetAction() {
-			return CreateActions(text, textCount);
-		}
+        virtual Action *GetAction()
+        {
+            return CreateActions(text, textCount);
+        }
 
-        State* GetTargetState()
+        State *GetTargetState()
         {
             return FixedTargetTransitionMixin::GetTargetState();
         }
 
-		bool IsTriggered()
-		{
-			cout << "Tikrinamas perejimas -" << ((IntegerMatchCondition*)condition)->target << endl;
+        bool IsTriggered()
+        {
+            cout << "Tikrinamas perejimas -" << ((IntegerMatchCondition *)condition)->target << endl;
 
-			bool result = ConditionalTransitionMixin::IsTriggered();
-			if (result) {
-				cout << "Issaukia\n";
-			}
-			else {
-				cout << "Neissaukia\n";
-			}
-			return result;
-		}
-	};
+            bool result = ConditionalTransitionMixin::IsTriggered();
+            if (result)
+            {
+                cout << "Issaukia\n";
+            }
+            else
+            {
+                cout << "Neissaukia\n";
+            }
+            return result;
+        }
+    };
 
     /*
- * Klase paveldi StateMachineState ir turi "tekstinius" veiksmus
- */
+     * Klase paveldi StateMachineState ir turi "tekstinius" veiksmus
+     */
     class DemoState : public State
     {
     public:
-        const char** text;
+        const char **text;
         unsigned textCount;
 
-        const char** entryText;
+        const char **entryText;
         unsigned entryTextCount;
 
-        const char** exitText;
+        const char **exitText;
         unsigned exitTextCount;
 
-        virtual Action* GetActions();
-        virtual Action* GetEntryActions();
-        virtual Action* GetExitActions();
+        virtual Action *GetActions();
+        virtual Action *GetEntryActions();
+        virtual Action *GetExitActions();
     };
 
-    Action* DemoState::GetActions()
+    Action *DemoState::GetActions()
     {
         return CreateActions(text, textCount);
     }
 
-    Action* DemoState::GetEntryActions()
+    Action *DemoState::GetEntryActions()
     {
         return CreateActions(entryText, entryTextCount);
     }
 
-    Action* DemoState::GetExitActions()
+    Action *DemoState::GetExitActions()
     {
         return CreateActions(exitText, exitTextCount);
     }
-
-
 
     int entry()
     {
         int option;
         // string masyvai, naudojami visose busenose
-        const char* allText[] = {
+        const char *allText[] = {
             // Busenu tekstas
             "Ieiname i busena A", "Busenoje A", "Iseiname is busenos A",
             "Ieiname i busena B", "Busenoje B", "Iseiname is busenos B",
@@ -126,8 +131,7 @@ namespace Demo {
             "Perejimas 12",
             "Perejimas 13",
             "Perejimas 14",
-            "Perejimas 15"
-        };
+            "Perejimas 15"};
 
         // Sukuriam savo busenu automata
         DemoState states[7];
@@ -150,7 +154,7 @@ namespace Demo {
 
             transitions[i].next = NULL;
 
-            IntegerMatchCondition* condition = new IntegerMatchCondition;
+            IntegerMatchCondition *condition = new IntegerMatchCondition;
             condition->watch = &option;
             condition->target = (i + 1);
             transitions[i].condition = condition;
@@ -198,7 +202,7 @@ namespace Demo {
 
         // Nustatom busenu automata
         StateMachine sm;
-        sm.initial = states + 0;
+        sm.initial = states[0];
         sm.current = NULL;
 
         // Paleidziam demo
@@ -208,24 +212,27 @@ namespace Demo {
         while (true)
         {
             // Rodom esama situacija
-            if (sm.current != NULL) {
-                cout << "\n\nEsama busena:\n" << ((DemoState*)sm.current)->text[0] << endl;
+            if (sm.current != NULL)
+            {
+                cout << "\n\nEsama busena:\n"
+                     << ((DemoState *)sm.current)->text[0] << endl;
                 cout << "Perejimai is sios busenos:\n";
 
                 // isvedame visus galimus perejimus
-                BaseTransition* next = sm.current->firstTransition;
+                BaseTransition *next = sm.current->firstTransition;
 
                 while (next != NULL)
                 {
-                    DemoTransition* nextDT = (DemoTransition*)(next);
-                    DemoState* to = (DemoState*)nextDT->target;
+                    DemoTransition *nextDT = (DemoTransition *)(next);
+                    DemoState *to = (DemoState *)nextDT->target;
                     cout << nextDT->text[0] << " buti " << to->text[0] << endl;
 
                     // Imam sekanti perejima
                     next = next->next;
                 }
             }
-            else {
+            else
+            {
                 cout << "\n\nNera dabartines busenos\nNera dabartiniu perejimu\n";
             }
 
@@ -234,13 +241,13 @@ namespace Demo {
 
             // gaunam vartotojo ivedima
             cin >> buffer;
-            option = atoi(buffer);//verciam i skaiciu
+            option = atoi(buffer); // verciam i skaiciu
 
             // Paleidziam SM viena iteracija
-            Action* actions = sm.Update();
+            Action *actions = sm.Update();
 
             // Isvedam teksta (ivykdom veiksma)
-            Action* next = actions;
+            Action *next = actions;
             while (next != NULL)
             {
                 next->Act();
