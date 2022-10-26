@@ -1,0 +1,9 @@
+namespace HW01
+{
+    [default_interface]
+    runtimeclass StateMachine : Windows.UI.Xaml.Controls.Page
+    {
+        StateMachine();
+        Int32 MyProperty;
+    }
+}
