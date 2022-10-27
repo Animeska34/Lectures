@@ -77,7 +77,7 @@ public:
 	Vector2 Normalize() {
 		try {
 			auto m = Magnitude();
-			return Vector2(x / m, y / m);
+			return m==0? Vector2(0,0) : Vector2(x / m, y / m);
 		}
 		catch (...) {
 			throw;
