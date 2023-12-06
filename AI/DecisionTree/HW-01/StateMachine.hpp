@@ -1,17 +1,21 @@
 #pragma once
 
-namespace FSM {
+namespace FSM
+{
 
-	class Action {
+	class Action
+	{
 	public:
 		float priority;
-		Action* next;
-		
-		Action* GetLast() {
+		Action *next;
+
+		Action *GetLast()
+		{
 			return next == 0 ? this : next->GetLast();
 		}
 
-		void DeleteList() {
+		void DeleteList()
+		{
 			if (next != 0)
 				next->DeleteList();
 			delete this;
@@ -19,8 +23,10 @@ namespace FSM {
 
 		virtual void Act() = 0;
 
-		void ExecuteAll() {
-			if (this) {
+		void ExecuteAll()
+		{
+			if (this)
+			{
 				Act();
 				if (next)
 					next->ExecuteAll();
@@ -28,108 +34,122 @@ namespace FSM {
 		}
 	};
 
-	class Condition {
+	class Condition
+	{
 	public:
 		virtual bool Test() { return false; }
 	};
 
 	class State;
 
-	class Transition {
+	class Transition
+	{
 	public:
-		Transition* next;
+		Transition *next;
 		virtual bool IsTriggered() { return false; }
-		//virtual Action* GetActions() { return 0; }
-		//virtual State* GetTargetState() { return 0; }
+		// virtual Action* GetActions() { return 0; }
+		// virtual State* GetTargetState() { return 0; }
 
-		State* target;
-		Action* actions;
+		State *target;
+		Action *actions;
 
-		Transition(State* t) {
+		Transition(State *t)
+		{
 			target = t;
 		}
 	};
 
-	class State {
+	class State
+	{
 	public:
-		Transition* transition;
-		Action* entryActions;
-		Action* actions;
-		Action* exitActions;
-		const char* name;
-		//virtual Action* GetActions() = 0;
-		//virtual Action* GetEntryActions() = 0;
-		//virtual Action* GetExitActions() = 0;
+		Transition *transition;
+		Action *entryActions;
+		Action *actions;
+		Action *exitActions;
+		const char *name;
+		// virtual Action* GetActions() = 0;
+		// virtual Action* GetEntryActions() = 0;
+		// virtual Action* GetExitActions() = 0;
 
-		class State(const char* n = "Unnamed State") {
+		class State(const char *n = "Unnamed State")
+		{
 			name = n;
 		}
 
-		class State(Transition *t) {
+		class State(Transition *t)
+		{
 			transition = t;
 			name = "Unnamed State";
 		}
 
-		class State(Transition* t, const char* n) {
+		class State(Transition *t, const char *n)
+		{
 			transition = t;
 			name = n;
 		}
 	};
 
-	class ConditionalTransition : public Transition {
+	class ConditionalTransition : public Transition
+	{
 	public:
-		Condition* condition;
-		virtual bool IsTriggered() {
+		Condition *condition;
+		virtual bool IsTriggered()
+		{
 			return condition->Test();
 		}
-		ConditionalTransition(State* t, Condition* c) : Transition(t) {
+		ConditionalTransition(State *t, Condition *c) : Transition(t)
+		{
 			condition = c;
 		}
 	};
 
-	class NotConditionalTransition : public ConditionalTransition {
+	class NotConditionalTransition : public ConditionalTransition
+	{
 	public:
-		virtual bool IsTriggered() {
+		virtual bool IsTriggered()
+		{
 			return !condition->Test();
 		}
-		NotConditionalTransition(State* t, Condition* c) : ConditionalTransition(t, c){}
+		NotConditionalTransition(State *t, Condition *c) : ConditionalTransition(t, c) {}
 	};
 
-
-	class StateMachine {
+	class StateMachine
+	{
 	public:
-		State* initial;
-		State* current;
+		State *initial;
+		State *current;
 
-		Action* Update() {
-			Action* actions = 0;
-			if (!current) 
+		Action *Update()
+		{
+			Action *actions = 0;
+			if (!current)
 			{
-				if (initial) 
+				if (initial)
 				{
 					current = initial;
 					actions = current->actions;
 				}
 			}
-			else 
+			else
 			{
-				Transition* transition = 0;
+				Transition *transition = 0;
 
-				Transition* test = current->transition;
+				Transition *test = current->transition;
 				while (test)
 				{
-					if (test->IsTriggered()) {
+					if (test->IsTriggered())
+					{
 						transition = test;
 						break;
 					}
-						
+
 					test = test->next;
 				}
 
-				if (transition!=0)
+				if (transition != 0)
 				{
-					State* nextState = transition->target;
-					Action* temp= 0, * last=0;
+					State *nextState = transition->target;
+					Action *temp = 0, *last = 0;
 
 					if (current->exitActions != 0)
 					{
@@ -138,7 +158,8 @@ namespace FSM {
 					}
 
 					temp = transition->actions;
-					if (temp != 0) {
+					if (temp != 0)
+					{
 						if (last != 0)
 							last->next = temp;
 						else
@@ -147,7 +168,8 @@ namespace FSM {
 					}
 
 					temp = nextState->entryActions;
-					if (temp!=0) {
+					if (temp != 0)
+					{
 						if (last != 0)
 							last->next = temp;
 						else
@@ -161,7 +183,8 @@ namespace FSM {
 			}
 		}
 
-		StateMachine(State *i) {
+		StateMachine(State *i)
+		{
 			initial = i;
 		}
 	};
